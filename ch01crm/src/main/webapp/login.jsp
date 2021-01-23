@@ -11,6 +11,26 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <script type="text/javascript" src="jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
 </head>
 <body>
+<script type="text/javascript">
+	$(function () {
+		//alert("测试页面是否加载完成");
+		$("#loginAct").focus();
+		$.trim($("#loginAct").val(""));
+		$.trim($("#loginPwd").val(""));
+		$("#loginBtn").click(function () {
+			login();
+		})
+		$("input").keydown(function (event) {
+			//alert(event.keyCode);
+			if(event.keycode==13){
+				login();
+			}
+		});
+		function login() {
+			alert("登录方法");
+		}
+	})
+</script>
 	<div style="position: absolute; top: 0px; left: 0px; width: 60%;">
 		<img src="image/IMG_7114.JPG" style="width: 100%; height: 90%; position: relative; top: 50px;">
 	</div>
@@ -26,17 +46,17 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<form action="workbench/index.html" class="form-horizontal" role="form">
 				<div class="form-group form-group-lg">
 					<div style="width: 350px;">
-						<input class="form-control" type="text" placeholder="用户名">
+						<input class="form-control" type="text" id="loginAct" placeholder="用户名">
 					</div>
 					<div style="width: 350px; position: relative;top: 20px;">
-						<input class="form-control" type="password" placeholder="密码">
+						<input class="form-control" type="password" id="loginPwd" placeholder="密码">
 					</div>
 					<div class="checkbox"  style="position: relative;top: 30px; left: 10px;">
 						
 							<span id="msg"></span>
 						
 					</div>
-					<button type="submit" class="btn btn-primary btn-lg btn-block"  style="width: 350px; position: relative;top: 45px;">登录</button>
+					<button type="button" class="btn btn-primary btn-lg btn-block"  id="loginBtn" style="width: 350px; position: relative;top: 45px;">登录</button>
 				</div>
 			</form>
 		</div>
