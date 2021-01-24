@@ -11,7 +11,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,15 +26,15 @@ public class UserController extends HttpServlet {
     }
 
     private void login(HttpServletRequest request, HttpServletResponse response) {
-        UserService us = (UserService) ServiceFactory.getService(new UserServiceImpl());
+        System.out.println("进入到用户验证登录操作");
         String loginAct = request.getParameter("loginAct");
-        String loginPwdStr = request.getParameter("loginPwd");
-        String loginPwd = MD5Util.getMD5(loginPwdStr);
+        String loginPwd = request.getParameter("loginPwd");
+        loginPwd = MD5Util.getMD5(loginPwd);
         String ip = request.getRemoteAddr();
-        HttpSession session = request.getSession();
+        UserService us = (UserService) ServiceFactory.getService(new UserServiceImpl());
         try{
             User user = us.login(loginAct,loginPwd,ip);
-            session.setAttribute("user",user);
+            request.getSession().setAttribute("user",user);
             PrintJson.printJsonFlag(response,true);
         }catch (Exception e){
             e.printStackTrace();
