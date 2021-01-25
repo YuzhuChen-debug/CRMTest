@@ -23,15 +23,19 @@ public class UserServiceImpl implements UserService {
         if(user==null){
             throw new LoginErrorException("登录账号或者密码错误");
         }
+        System.out.println(1);
         if(!user.getAllowIps().contains(ip)){
             throw new LoginErrorException("ip地址受限");
         }
+        System.out.println(2);
         if("0".equals(user.getLockState())){
             throw new LoginErrorException("账号状态已锁定");
         }
+        System.out.println(3);
         if(user.getExpireTime().compareTo(nowTime)<0){
             throw new LoginErrorException("登录时间受限");
         }
+        System.out.println(4);
         return user;
     }
 }
