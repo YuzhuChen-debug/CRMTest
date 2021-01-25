@@ -15,21 +15,56 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	$(function () {
 		//alert("测试页面是否加载完成");
 		$("#loginAct").focus();
-		$.trim($("#loginAct").val(""));
-		$.trim($("#loginPwd").val(""));
+		$("#loginAct").val("");
+		$("#loginPwd").val("");
 		$("#loginBtn").click(function () {
 			login();
 		})
-		$("input").keydown(function (event) {
+		$(window).keydown(function (event) {
 			//alert(event.keyCode);
 			if(event.keycode==13){
 				login();
 			}
 		});
-		function login() {
-			alert("登录方法");
-		}
+
 	})
+	function login() {
+		//alert("登录方法");
+		//获取账号和密码,并且去除前后空格
+		var loginAct = $.trim($("#loginAct").val());
+		var loginPwd = $.trim($("#loginPwd").val());
+		if(loginAct==""||loginPwd==""){
+			$("#msg").html("<font color='#FF0000'>账号密码不能为空呀</font>");
+			return false;
+		}
+		$.ajax({
+			url:"settings/user/login",
+			data:{
+				"loginAct":loginAct,
+				"loginPwd":loginPwd
+			},
+			dataType:"JSON",
+			type:"POST",
+			success:function (data) {
+				//分析需要返回的数据
+				/*
+                    data:{
+                        "flag":true/false,
+                        //message是错误提示
+                        "message",message
+                    }
+                * */
+				if(data.flag){
+					//跳转到相关页面
+					document.location.href = "workbench/index.html";
+				}else{
+					//在span标签当中显示错误提示
+					$("#msg").html(data.message);
+				}
+
+			}
+		})
+	}
 </script>
 	<div style="position: absolute; top: 0px; left: 0px; width: 60%;">
 		<img src="image/IMG_7114.JPG" style="width: 100%; height: 90%; position: relative; top: 50px;">
