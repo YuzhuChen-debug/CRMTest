@@ -38,7 +38,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			return false;
 		}
 		$.ajax({
-			url:"settings/user/login",
+			url:"settings/user/login.do",
 			data:{
 				"loginAct":loginAct,
 				"loginPwd":loginPwd
@@ -54,9 +54,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
                         "message",message
                     }
                 * */
-				if(data.flag){
+				if(data.success){
 					//跳转到相关页面
-					document.location.href = "workbench/index.html";
+					window.location.href = "workbench/index.html";
 				}else{
 					//在span标签当中显示错误提示
 					$("#msg").html(data.message);

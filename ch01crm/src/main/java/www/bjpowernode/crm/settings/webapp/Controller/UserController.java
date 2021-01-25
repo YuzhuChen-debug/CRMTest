@@ -20,7 +20,7 @@ public class UserController extends HttpServlet {
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("进入到用户登录控制器");
         String path =request.getServletPath();
-        if("/settings/user/login".equals(path)){
+        if("/settings/user/login.do".equals(path)){
             login(request,response);
         }
     }
@@ -36,11 +36,12 @@ public class UserController extends HttpServlet {
             User user = us.login(loginAct,loginPwd,ip);
             request.getSession().setAttribute("user",user);
             PrintJson.printJsonFlag(response,true);
+            System.out.println(5);
         }catch (Exception e){
             e.printStackTrace();
             String message = e.getMessage();
             Map<String,Object> map = new HashMap<>();
-            map.put("flag",false);
+            map.put("success",false);
             map.put("message",message);
             PrintJson.printJsonObj(response,map);
         }
