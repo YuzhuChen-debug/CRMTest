@@ -4,7 +4,7 @@
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
-  
+  <!--过滤乱码过滤器-->
   <filter>
     <filter-name>EcodingFilter</filter-name>
     <filter-class>www.bjpowernode.crm.Filters.EcodingFilter</filter-class>
@@ -12,6 +12,16 @@
   <filter-mapping>
     <filter-name>EcodingFilter</filter-name>
     <url-pattern>*.do</url-pattern>
+  </filter-mapping>
+<!--登录保护过滤器-->
+  <filter>
+    <filter-name>LoginFilter</filter-name>
+    <filter-class>www.bjpowernode.crm.Filters.LoginFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>LoginFilter</filter-name>
+    <url-pattern>*.do</url-pattern>
+    <url-pattern>*.jsp</url-pattern>
   </filter-mapping>
 
   <servlet>
@@ -22,7 +32,6 @@
     <servlet-name>settings/user/login</servlet-name>
     <url-pattern>/settings/user/login.do</url-pattern>
   </servlet-mapping>
-
 </web-app>
 
 
