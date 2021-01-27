@@ -18,7 +18,7 @@ import java.util.Map;
 public class ActivityController extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("进入到用户登录控制器");
+        System.out.println("进入到市场活动控制器");
         String path =request.getServletPath();
         if("/workbench/Activity/xxx.do".equals(path)){
             //XXX(request,response);
