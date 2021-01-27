@@ -22,7 +22,7 @@ public class LoginFilter implements Filter {
             if(user!=null){
                 filterChain.doFilter(request,response);
             }else{
-                response.sendRedirect(request.getContextPath()+"/index.html");
+                response.sendRedirect(request.getContextPath()+"/index.jsp");
             }
         }
     }

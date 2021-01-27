@@ -1,6 +1,7 @@
 package www.bjpowernode.crm.settings.Services.imp;
 
 import www.bjpowernode.crm.Exceptions.LoginErrorException;
+import www.bjpowernode.crm.Exceptions.UserListErrorException;
 import www.bjpowernode.crm.Utils.DateTimeUtil;
 import www.bjpowernode.crm.Utils.SqlSessionUtil;
 import www.bjpowernode.crm.settings.Services.UserService;
@@ -8,6 +9,7 @@ import www.bjpowernode.crm.settings.dao.UserDao;
 import www.bjpowernode.crm.settings.domain.User;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class UserServiceImpl implements UserService {
@@ -37,5 +39,15 @@ public class UserServiceImpl implements UserService {
         }
         System.out.println(4);
         return user;
+    }
+
+    @Override
+    public List<User> userList() throws UserListErrorException {
+        System.out.println("进入到用户查询列表服务层");
+        List<User> uList =  userDao.userList();
+        if(uList==null){
+            throw new UserListErrorException("用户列表获取失败");
+        }
+        return uList;
     }
 }
