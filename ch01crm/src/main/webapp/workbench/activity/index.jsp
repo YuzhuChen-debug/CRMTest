@@ -55,23 +55,26 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			})
 
 
+
 		})
 
 		$("#saveBtn").click(function () {
-
-
+			/*var owner = $.trim($("#create-owner").val());
+			var name = $.trim($("#create-name").val());
+			alert(name);
+			alert(owner);*/
             $.ajax({
-				"url":"workbench/Activity/save.do",
+				url:"workbench/Activity/save.do",
 				data:{
-					"owner" : $("#create-owner").val(),
-					"name" : $("#create-name").val(),
-					"startDate" : $("#create-startDate").val(),
-					"endDate" : $("#create-endDate").val(),
-					"cost" : $("#create-cost").val(),
-					"description" : $("#create-description").val()
+					owner: $.trim($("#create-owner").val()),
+					name: $.trim($("#create-name").val()),
+					startDate: $.trim($("#create-startDate").val()),
+					endDate: $.trim($("#create-endDate").val()),
+					cost: $.trim($("#create-cost").val()),
+					description:$.trim( $("#create-description").val())
 				},
-				dataType:"post",
-				type:"json",
+				dataType:"json",
+				type:"post",
 				success:function (data) {
 					/*
 						"data":{"success":true/false,"msg":msg}
@@ -155,7 +158,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					<button type="button" class="btn btn-primary" data-dismiss="modal" id="saveBtn">保存</button>
+					<button type="button" class="btn btn-primary"  id="saveBtn">保存</button>
 				</div>
 			</div>
 		</div>
