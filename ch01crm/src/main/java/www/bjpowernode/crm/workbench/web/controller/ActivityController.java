@@ -1,6 +1,5 @@
 package www.bjpowernode.crm.workbench.web.controller;
 
-import www.bjpowernode.crm.Exceptions.SaveActivityErrorException;
 import www.bjpowernode.crm.Utils.DateTimeUtil;
 import www.bjpowernode.crm.Utils.PrintJson;
 import www.bjpowernode.crm.Utils.ServiceFactory;
@@ -17,10 +16,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 public class ActivityController extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

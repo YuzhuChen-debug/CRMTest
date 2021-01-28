@@ -28,8 +28,9 @@
  
   <mappers>
    
-      <package name="www.bjpowernode.crm.settings.dao"/>
-    <package name="www.bjpowernode.crm.workbench.dao"/>
+
+    <mapper resource="www/bjpowernode/crm/workbench/dao/ActivityDao.xml"/>
+    <mapper resource="www/bjpowernode/crm/settings/dao/UserDao.xml"/>
     
   </mappers>
 </configuration>
