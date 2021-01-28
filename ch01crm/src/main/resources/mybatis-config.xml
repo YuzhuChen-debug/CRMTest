@@ -29,6 +29,7 @@
   <mappers>
    
       <package name="www.bjpowernode.crm.settings.dao"/>
+    <package name="www.bjpowernode.crm.workbench.dao"/>
     
   </mappers>
 </configuration>
