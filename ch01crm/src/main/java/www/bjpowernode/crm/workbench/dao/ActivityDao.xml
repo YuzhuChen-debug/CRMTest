@@ -3,8 +3,8 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="www.bjpowernode.crm.workbench.dao.ActivityDao">
-    <insert id="save" >
-      insert into tbl_Activity (
+  <insert id="save">
+      insert into tbl_activity(
         id,
         owner,
         name,
@@ -14,7 +14,8 @@
         description,
         createTime,
         createBy
-      )values(
+      )
+      values(
         #{id},
         #{owner},
         #{name},

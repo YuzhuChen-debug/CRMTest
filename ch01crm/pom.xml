@@ -85,6 +85,16 @@
         </includes>
         <filtering>false</filtering>
       </resource>
+
+      <resource>
+        <directory>src/main/resources</directory>
+        <includes>
+
+          <include>**/*.xml</include><!--查找mybatis-config.xml文件-->
+          <include>**/*.properties</include><!--查找mysql.properties文件-->
+        </includes>
+        <filtering>true</filtering>
+      </resource>
     </resources>
 
   </build>

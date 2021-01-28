@@ -61,8 +61,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 
             $.ajax({
-				"url":"workbench/Activity/save",
-				"data":{
+				"url":"workbench/Activity/save.do",
+				data:{
 					"owner" : $("#create-owner").val(),
 					"name" : $("#create-name").val(),
 					"startDate" : $("#create-startDate").val(),
@@ -70,9 +70,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					"cost" : $("#create-cost").val(),
 					"description" : $("#create-description").val()
 				},
-				"dataType":"post",
-				"type":"json",
-				"success":function (data) {
+				dataType:"post",
+				type:"json",
+				success:function (data) {
 					/*
 						"data":{"success":true/false,"msg":msg}
 					* */
@@ -81,7 +81,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
                         //关闭模态窗口
                         $("#createActivityModal").modal("hide");
                     }else{
-					    alert("data.msg");
+					    alert("有问题");
                     }
 
 				}

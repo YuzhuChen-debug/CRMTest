@@ -1,5 +1,6 @@
 package www.bjpowernode.crm.workbench.web.controller;
 
+import www.bjpowernode.crm.Exceptions.SaveActivityErrorException;
 import www.bjpowernode.crm.Utils.DateTimeUtil;
 import www.bjpowernode.crm.Utils.PrintJson;
 import www.bjpowernode.crm.Utils.ServiceFactory;
@@ -9,6 +10,7 @@ import www.bjpowernode.crm.settings.Services.imp.UserServiceImpl;
 import www.bjpowernode.crm.settings.domain.User;
 import www.bjpowernode.crm.workbench.Services.ActivityService;
 import www.bjpowernode.crm.workbench.Services.Imp.ActivityServiceImp;
+import www.bjpowernode.crm.workbench.domain.Activity;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -26,7 +28,7 @@ public class ActivityController extends HttpServlet {
         String path =request.getServletPath();
         if("/workbench/Activity/UserList.do".equals(path)){
             userList(request,response);
-        }else if("/workbench/Activity/save".equals(path)){
+        }else if("/workbench/Activity/save.do".equals(path)){
             save(request,response);
         }
 
@@ -47,29 +49,19 @@ public class ActivityController extends HttpServlet {
         String createTime= DateTimeUtil.getSysTime();
         String createBy= ((User)request.getSession().getAttribute("user")).getName();
         //把信息放到一个map集合当中
-        Map<String,Object> map = new HashMap<>();
-        map.put("id",id);
-        map.put("owner",owner);
-        map.put("name",name);
-        map.put("startDate",startDate);
-        map.put("endDate",endDate);
-        map.put("cost",cost);
-        map.put("description",description);
-        map.put("createTime",createTime);
-        map.put("createBy",createBy);
-        System.out.println(111111);
+        Activity a = new Activity();
+        a.setId(id);
+        a.setOwner(owner);
+        a.setName(name);
+        a.setStartDate(startDate);
+        a.setEndDate(endDate);
+        a.setCost(cost);
+        a.setDescription(description);
+        a.setCreateBy(createBy);
+        a.setCreateTime(createTime);
         ActivityService as = (ActivityService) ServiceFactory.getService( new ActivityServiceImp());
-        try{
-             boolean flag = as.save(map);
-            PrintJson.printJsonFlag(response,flag);
-        }catch(Exception e){
-            e.printStackTrace();
-            String msg = e.getMessage();
-            Map<String,Object> map1 = new HashMap<>();
-            map1.put("flag",false);
-            map1.put("msg",msg);
-            PrintJson.printJsonObj(response,map1);
-        }
+        boolean flag = as.save(a);
+        PrintJson.printJsonFlag(response,flag);
     }
 
     private void userList(HttpServletRequest request, HttpServletResponse response) {

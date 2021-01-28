@@ -2,10 +2,9 @@ package www.bjpowernode.crm.workbench.Services;
 
 
 import www.bjpowernode.crm.Exceptions.SaveActivityErrorException;
-
-import java.util.Map;
+import www.bjpowernode.crm.workbench.domain.Activity;
 
 public interface ActivityService {
 
-    boolean save(Map<String, Object> map) throws SaveActivityErrorException;
+    boolean save(Activity a) ;
 }

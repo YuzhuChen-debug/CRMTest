@@ -9,8 +9,8 @@
   <typeAliases>
   
   	<package name="www.bjpowernode.crm.settings.domain"/>
-  	
-  
+    <package name="www.bjpowernode.crm.workbench.domain"/>
+
   </typeAliases>
   
   <environments default="development">
@@ -24,7 +24,7 @@
       </dataSource>
     </environment>
   </environments>
-  
+
  
   <mappers>
    

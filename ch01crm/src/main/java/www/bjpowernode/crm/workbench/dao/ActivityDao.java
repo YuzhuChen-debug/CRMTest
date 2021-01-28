@@ -1,7 +1,8 @@
 package www.bjpowernode.crm.workbench.dao;
 
-import java.util.Map;
+import www.bjpowernode.crm.workbench.domain.Activity;
+
 
 public interface ActivityDao {
-    int save(Map<String, Object> map);
+    int save(Activity a );
 }
