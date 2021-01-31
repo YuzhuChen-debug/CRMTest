@@ -20,6 +20,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 	$(function(){
 		$("#createBtn").click(function () {
+			$("#createForm")[0].reset("");
 
             $(".time").datetimepicker({
                 minView: "month",
@@ -81,6 +82,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					* */
 					if(data.success){
 					    //刷新市场活动信息列表
+						pageList(1,2);
                         //关闭模态窗口
                         $("#createActivityModal").modal("hide");
                     }else{
@@ -92,6 +94,59 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 
 		})
+		//页面杠加载的时候进行查询函数
+		pageList(1,2);
+		//点击查询按钮,进行查询函数
+		$("#serchBtn").click(function () {
+			pageList(1,2);
+		})
+
+
+		//查询函数,包括条件查询和分页查询
+		//
+		function pageList(pageNumber,pageSize) {
+			//alert("进行查询操作");
+			var pageNumber = pageNumber;
+			var pageSize = pageSize;
+			var name = $.trim($("#serch-name").val());
+			var owner = $.trim($("#serch-owner").val());
+			var startDate = $.trim($("#serch-startDate").val());
+			var endDate = $.trim($("#serch-endDate").val());
+			$.ajax({
+				url:"workbench/Activity/pageList.do",
+				dataType:"json",
+				type:"post",
+				data:{
+					pageNumber:pageNumber,
+					pageSize:pageSize,
+					name:name,
+					owner:owner,
+					startDate:startDate,
+					endDate:endDate
+				},
+				success:function (data) {
+					/*
+						data:{success:true,caav:{count:count,aList:[{a1},{a2},{a3}]}},
+						or
+						data:{success:false,msg:msg}
+					* */
+					var html= "";
+					if(data.success){
+						html += '<tr class="active">';
+						html += '	<td><input type="checkbox"  value="'+data.caav.aList.id+'"/></td>';
+						html += '	<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'detail.html\';">'+data.caav.aList.name+'</a></td>';
+						html += '	<td>'+data.caav.aList.owner+'</td>';
+						html += '	<td>'+data.caav.aList.startDate+'</td>';
+						html += '	<td>'+data.caav.aList.endDate+'</td>';
+						html += '</tr>';
+						$("#tbodyBtn").html(html);
+					}else{
+						alert(data.msg);
+
+					}
+				}
+			})
+		}
 
 		
 	});
@@ -112,7 +167,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				</div>
 				<div class="modal-body">
 				
-					<form class="form-horizontal" role="form">
+					<form class="form-horizontal" role="form" id="createForm">
 					
 						<div class="form-group">
 							<label for="create-marketActivityOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
@@ -248,14 +303,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">名称</div>
-				      <input class="form-control" type="text">
+				      <input class="form-control" type="text" id="serch-name">
 				    </div>
 				  </div>
 				  
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">所有者</div>
-				      <input class="form-control" type="text">
+				      <input class="form-control" type="text" id="serch-owner">
 				    </div>
 				  </div>
 
@@ -263,17 +318,17 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">开始日期</div>
-					  <input class="form-control" type="text" id="startTime" />
+					  <input class="form-control" type="text" id="serch-startDate" />
 				    </div>
 				  </div>
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">结束日期</div>
-					  <input class="form-control" type="text" id="endTime">
+					  <input class="form-control" type="text" id="serch-endDate">
 				    </div>
 				  </div>
 				  
-				  <button type="submit" class="btn btn-default">查询</button>
+				  <button type="submit" class="btn btn-default" id="serchBtn">查询</button>
 				  
 				</form>
 			</div>
@@ -296,8 +351,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<td>结束日期</td>
 						</tr>
 					</thead>
-					<tbody>
-						<tr class="active">
+					<tbody id="tbodyBtn">
+						<%--<tr class="active">
 							<td><input type="checkbox" /></td>
 							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='detail.html';">发传单</a></td>
                             <td>zhangsan</td>
@@ -310,7 +365,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
                             <td>zhangsan</td>
                             <td>2020-10-10</td>
                             <td>2020-10-20</td>
-                        </tr>
+                        </tr>--%>
 					</tbody>
 				</table>
 			</div>

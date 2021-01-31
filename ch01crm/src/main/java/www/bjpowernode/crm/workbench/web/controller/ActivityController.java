@@ -4,6 +4,7 @@ import www.bjpowernode.crm.Utils.DateTimeUtil;
 import www.bjpowernode.crm.Utils.PrintJson;
 import www.bjpowernode.crm.Utils.ServiceFactory;
 import www.bjpowernode.crm.Utils.UUIDUtil;
+import www.bjpowernode.crm.VO.CountAndActivityVO;
 import www.bjpowernode.crm.settings.Services.UserService;
 import www.bjpowernode.crm.settings.Services.imp.UserServiceImpl;
 import www.bjpowernode.crm.settings.domain.User;
@@ -16,7 +17,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 public class ActivityController extends HttpServlet {
     @Override
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -26,7 +30,52 @@ public class ActivityController extends HttpServlet {
             userList(request,response);
         }else if("/workbench/Activity/save.do".equals(path)){
             save(request,response);
+        }else if("/workbench/Activity/pageList.do".equals(path)){
+            pageList(request,response);
         }
+
+
+
+    }
+
+    private void pageList(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("进入到列表查询控制器");
+        String owner = request.getParameter("owner");
+        String name = request.getParameter("name");
+        String startDate = request.getParameter("startDate");
+        String endDate = request.getParameter("endDate");
+        String pageSizeStr = request.getParameter("pageSize");
+        int pageSize =Integer.parseInt(pageSizeStr);
+        String pageNumberStr = request.getParameter("pageNumber");
+        int pageNumber = Integer.parseInt(pageNumberStr);
+        int skipCount = pageSize*(pageNumber-1);
+        Map<String,Object> map = new HashMap<>();
+        map.put("owner",owner);
+        map.put("name",name);
+        map.put("startDate",startDate);
+        map.put("endDate",endDate);
+        map.put("owskipCountner",skipCount);
+        map.put("owpageSizener",pageSize);
+        ActivityService as = (ActivityService) ServiceFactory.getService( new ActivityServiceImp());
+        //第一个需要查询出aList,  第二个需要查询出总条数count(*)
+        try{
+            //返回一个VO类,VO类只能由后端向前端传递数据
+            CountAndActivityVO<List<Activity>> caav = as.getCountAndActivity(map);
+            Map<String,Object> map1 = new HashMap<>();
+            map1.put("success",true);
+            map1.put("caav",caav);
+            PrintJson.printJsonObj(response,map1);
+        }catch(Exception e){
+            e.printStackTrace();
+            String msg = e.getMessage();
+            Map<String,Object> map2 = new HashMap<>();
+            map2.put("success",false);
+            map2.put("msg",msg);
+            PrintJson.printJsonObj(response,map2);
+        }
+
+
+
 
 
 
