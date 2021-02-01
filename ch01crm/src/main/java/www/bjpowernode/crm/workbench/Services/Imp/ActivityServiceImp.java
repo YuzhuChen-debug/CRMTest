@@ -25,9 +25,10 @@ public class ActivityServiceImp implements ActivityService {
 
     @Override
     public CountAndActivityVO<List<Activity>> getCountAndActivity(Map<String, Object> map) throws pageListErrorException {
+        System.out.println("进入到列表查询业务层");
         CountAndActivityVO<List<Activity>> caav = new CountAndActivityVO<>();
         int count = activityDao.getCount(map);
-        if(count!=1){
+        if(count==-1){
             throw new pageListErrorException("查询总条数错误");
         }
         List<Activity> aList = activityDao.getActivityList(map);
