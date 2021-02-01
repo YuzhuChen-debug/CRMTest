@@ -5,53 +5,51 @@
 <mapper namespace="www.bjpowernode.crm.workbench.dao.ActivityDao">
   <select id="getActivityList" resultType="Activity">
     select
-      a.id,
-      a.name,
-     u.name as owner,
-     a.startDate,
-     a.endDate
+    a.id,
+    a.name,
+    u.name as owner,
+    a.startDate,
+    a.endDate
     from tbl_activity a
     join tbl_user u
     on a.owner=u.id
     <where>
-      <if test="name!=''and name!=null">
-        a.name like '%' #{name} '%'
-      </if>
-
-      <if test="owner!=''and owner!=null">
-        and  u.name like '%' #{owner} '%'
-      </if>
-      <if test="startDate!=''and startDate!=null">
-        and a.startDate &gt;  #{startDate}
-      </if>
-      <if test="endDate!=''and endDate!=null">
-        and a.startDate &lt;  #{startDate}
-      </if>
+        <if test="name!=null and name!=''">
+            a.name like '%' #{name} '%'
+        </if>
+        <if test="owner!=null and owner!=">
+            and u.name like '%' #{owner} '%'
+        </if>
+        <if test="startDate!=null and startDate!=''">
+            and u.startDate &gt; #{startDate}
+        </if>
+        <if test="endDate!=null and endDate!=''">
+            and u.endDate &lt; #{endDate}
+        </if>
     </where>
-    order by a.createTime desc
-    limit #{skipCount},#{pageSize}
-
+      order by a.createTime desc
+      limit #{skipCount},#{pageSize}
   </select>
 
   <select id="getCount" resultType="int">
-    select count(*) from tbl_activity
-    <where>
-      <if test="name!=''and name!=null">
-         a.name like '%' #{name} '%'
+    select count(*)
+      from tbl_activity a
+      join tbl_user u
+      on a.owner=u.id
+      <where>
+      <if test="name!=null and name!=''">
+          a.name like '%' #{name} '%'
       </if>
-
-      <if test="owner!=''and owner!=null">
-        and  u.name like '%' #{owner} '%'
+      <if test="owner!=null and owner!=''">
+          and u.name like '%' #{owner} '%'
       </if>
-      <if test="startDate!=''and startDate!=null">
-        and a.startDate &gt;  #{startDate}
+      <if test="startDate!=null and startDate!=''">
+          and u.startDate &gt; #{startDate}
       </if>
-      <if test="endDate!=''and endDate!=null">
-        and a.startDate &lt;  #{startDate}
+      <if test="endDate!=null and endDate!=''">
+          and u.endDate &lt; #{endDate}
       </if>
-    </where>
-     order by a.createTime desc
-    limit #{skipCount},#{pageSize}
+      </where>
   </select>
 
   <insert id="save">

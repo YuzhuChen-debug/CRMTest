@@ -1,16 +1,21 @@
 package www.bjpowernode.crm.VO;
 
 
+import java.util.List;
+
 public class CountAndActivityVO<T> {
     private int count;
-    private T t ;
-
-    public CountAndActivityVO(int count, T t) {
-        this.count = count;
-        this.t = t;
-    }
+    private List<T> aList;
 
     public CountAndActivityVO() {
+    }
+
+    @Override
+    public String toString() {
+        return "CountAndActivityVO{" +
+                "count=" + count +
+                ", aList=" + aList +
+                '}';
     }
 
     public int getCount() {
@@ -21,19 +26,17 @@ public class CountAndActivityVO<T> {
         this.count = count;
     }
 
-    @Override
-    public String toString() {
-        return "CountAndActivityVO{" +
-                "count=" + count +
-                ", t=" + t +
-                '}';
+    public List<T> getaList() {
+        return aList;
     }
 
-    public T getT() {
-        return t;
+    public void setaList(List<T> aList) {
+        this.aList = aList;
     }
 
-    public void setT(T t) {
-        this.t = t;
+    public CountAndActivityVO(int count, List<T> aList) {
+        this.count = count;
+        this.aList = aList;
     }
 }
+

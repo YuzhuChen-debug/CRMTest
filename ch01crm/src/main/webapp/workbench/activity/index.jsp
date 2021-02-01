@@ -15,6 +15,9 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 <script type="text/javascript" src="jquery/bootstrap_3.3.0/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/js/bootstrap-datetimepicker.js"></script>
 <script type="text/javascript" src="jquery/bootstrap-datetimepicker-master/locale/bootstrap-datetimepicker.zh-CN.js"></script>
+	<link rel="stylesheet" type="text/css" href="jquery/bs_pagination/jquery.bs_pagination.min.css">
+	<script type="text/javascript" src="jquery/bs_pagination/jquery.bs_pagination.min.js"></script>
+	<script type="text/javascript" src="jquery/bs_pagination/en.js"></script>
 
 <script type="text/javascript">
 
@@ -82,7 +85,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					* */
 					if(data.success){
 					    //刷新市场活动信息列表
-						pageList(1,2);
+						pageList(1 ,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
                         //关闭模态窗口
                         $("#createActivityModal").modal("hide");
                     }else{
@@ -95,10 +98,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 		})
 		//页面杠加载的时候进行查询函数
-		pageList(1,2);
+		pageList(1 ,5);
 		//点击查询按钮,进行查询函数
 		$("#serchBtn").click(function () {
-			pageList(1,2);
+			pageList(1 ,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
 		})
 
 
@@ -108,6 +111,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			//alert("进行查询操作");
 			var pageNumber = pageNumber;
 			var pageSize = pageSize;
+			//alert(pageNumber);
+			//alert(pageSize);
 			var name = $.trim($("#serch-name").val());
 			var owner = $.trim($("#serch-owner").val());
 			var startDate = $.trim($("#serch-startDate").val());
@@ -125,25 +130,54 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					endDate:endDate
 				},
 				success:function (data) {
+				    //alert(data.caav.aList);
+				    ///alert(111);
 					/*
-						data:{success:true,caav:{count:count,aList:[{a1},{a2},{a3}]}},
+						data:{success:true,
+                              caav:{count:count,
+                                    aList:[{a1},{a2},{a3}]}},
 						or
 						data:{success:false,msg:msg}
 					* */
-					var html= "";
+
 					if(data.success){
-						html += '<tr class="active">';
-						html += '	<td><input type="checkbox"  value="'+data.caav.aList.id+'"/></td>';
-						html += '	<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'detail.html\';">'+data.caav.aList.name+'</a></td>';
-						html += '	<td>'+data.caav.aList.owner+'</td>';
-						html += '	<td>'+data.caav.aList.startDate+'</td>';
-						html += '	<td>'+data.caav.aList.endDate+'</td>';
-						html += '</tr>';
-						$("#tbodyBtn").html(html);
+                        var html= "";
+					    $.each(data.caav.aList,function (i,n) {
+                            html += '<tr class="active">';
+                            html += '	<td><input type="checkbox"  value="'+n.id+'"/></td>';
+                            html += '	<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'detail.html\';">'+n.name+'</a></td>';
+                            html += '	<td>'+n.owner+'</td>';
+                            html += '	<td>'+n.startDate+'</td>';
+                            html += '	<td>'+n.endDate+'</td>';
+                            html += '</tr>';
+
+                        })
+                        $("#tbodyBtn").html(html);
+
+						$("#activityPage").bs_pagination({
+							currentPage: pageNumber, // 页码
+							rowsPerPage: pageSize, // 每页显示的记录条数
+							maxRowsPerPage: 20, // 每页最多显示的记录条数
+							totalPages: data.caav.count%pageSize==0 ? data.caav.count/pageSize :parseInt(data.caav.count/pageSize)+1, // 总页数
+							totalRows: data.caav.count, // 总记录条数
+
+							visiblePageLinks: 3, // 显示几个卡片
+
+							showGoToPage: true,
+							showRowsPerPage: true,
+							showRowsInfo: true,
+							showRowsDefaultInfo: true,
+
+							onChangePage : function(event, data){
+								pageList(data.currentPage , data.rowsPerPage);
+							}
+						});
 					}else{
-						//alert(data.msg);
+						alert(data.msg);
 
 					}
+
+
 				}
 			})
 		}
@@ -370,39 +404,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				</table>
 			</div>
 			
-			<div style="height: 50px; position: relative;top: 30px;">
-				<div>
-					<button type="button" class="btn btn-default" style="cursor: default;">共<b>50</b>条记录</button>
-				</div>
-				<div class="btn-group" style="position: relative;top: -34px; left: 110px;">
-					<button type="button" class="btn btn-default" style="cursor: default;">显示</button>
-					<div class="btn-group">
-						<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-							10
-							<span class="caret"></span>
-						</button>
-						<ul class="dropdown-menu" role="menu">
-							<li><a href="#">20</a></li>
-							<li><a href="#">30</a></li>
-						</ul>
-					</div>
-					<button type="button" class="btn btn-default" style="cursor: default;">条/页</button>
-				</div>
-				<div style="position: relative;top: -88px; left: 285px;">
-					<nav>
-						<ul class="pagination">
-							<li class="disabled"><a href="#">首页</a></li>
-							<li class="disabled"><a href="#">上一页</a></li>
-							<li class="active"><a href="#">1</a></li>
-							<li><a href="#">2</a></li>
-							<li><a href="#">3</a></li>
-							<li><a href="#">4</a></li>
-							<li><a href="#">5</a></li>
-							<li><a href="#">下一页</a></li>
-							<li class="disabled"><a href="#">末页</a></li>
-						</ul>
-					</nav>
-				</div>
+			<div id="activityPage">
+
 			</div>
 			
 		</div>

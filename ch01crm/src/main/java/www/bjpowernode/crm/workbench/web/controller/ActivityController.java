@@ -49,18 +49,20 @@ public class ActivityController extends HttpServlet {
         String pageNumberStr = request.getParameter("pageNumber");
         int pageNumber = Integer.parseInt(pageNumberStr);
         int skipCount = pageSize*(pageNumber-1);
+        System.out.println(pageSize);
+        System.out.println(pageNumber);
         Map<String,Object> map = new HashMap<>();
         map.put("owner",owner);
         map.put("name",name);
         map.put("startDate",startDate);
         map.put("endDate",endDate);
-        map.put("owskipCountner",skipCount);
-        map.put("owpageSizener",pageSize);
+        map.put("skipCount",skipCount);
+        map.put("pageSize",pageSize);
         ActivityService as = (ActivityService) ServiceFactory.getService( new ActivityServiceImp());
         //第一个需要查询出aList,  第二个需要查询出总条数count(*)
         try{
             //返回一个VO类,VO类只能由后端向前端传递数据
-            CountAndActivityVO<List<Activity>> caav = as.getCountAndActivity(map);
+            CountAndActivityVO<Activity> caav = as.getCountAndActivity(map);
             Map<String,Object> map1 = new HashMap<>();
             map1.put("success",true);
             map1.put("caav",caav);
