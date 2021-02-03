@@ -17,14 +17,14 @@
         <if test="name!=null and name!=''">
             a.name like '%' #{name} '%'
         </if>
-        <if test="owner!=null and owner!=">
+        <if test="owner!=null and owner!=''">
             and u.name like '%' #{owner} '%'
         </if>
         <if test="startDate!=null and startDate!=''">
-            and u.startDate &gt; #{startDate}
+            and a.startDate &gt; #{startDate}
         </if>
         <if test="endDate!=null and endDate!=''">
-            and u.endDate &lt; #{endDate}
+            and a.endDate &lt; #{endDate}
         </if>
     </where>
       order by a.createTime desc
@@ -44,10 +44,10 @@
           and u.name like '%' #{owner} '%'
       </if>
       <if test="startDate!=null and startDate!=''">
-          and u.startDate &gt; #{startDate}
+          and a.startDate &gt; #{startDate}
       </if>
       <if test="endDate!=null and endDate!=''">
-          and u.endDate &lt; #{endDate}
+          and a.endDate &lt; #{endDate}
       </if>
       </where>
   </select>

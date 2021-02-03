@@ -98,16 +98,34 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 		})
 		//页面杠加载的时候进行查询函数
-		pageList(1 ,5);
+		pageList(1 ,2);
 		//点击查询按钮,进行查询函数
 		$("#serchBtn").click(function () {
+			$("#hidden-owner").val($("#serch-owner").val());
+			$("#hidden-owner").val($("#serch-owner").val());
+			$("#hidden-owner").val($("#serch-owner").val());
+			$("#hidden-owner").val($("#serch-owner").val());
+			//pageList(1,3);
 			pageList(1 ,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
 		})
+
 
 
 		//查询函数,包括条件查询和分页查询
 		//
 		function pageList(pageNumber,pageSize) {
+			$("#serch-owner").val($("#hidden-owner").val());
+			$("#serch-owner").val($("#hidden-owner").val());
+			$("#serch-owner").val($("#hidden-owner").val());
+			$("#serch-owner").val($("#hidden-owner").val());
+			$(".time").datetimepicker({
+				minView: "month",
+				language:  'zh-CN',
+				format: 'yyyy-mm-dd',
+				autoclose: true,
+				todayBtn: true,
+				pickerPosition: "bottom-left"
+			});
 			//alert("进行查询操作");
 			var pageNumber = pageNumber;
 			var pageSize = pageSize;
@@ -153,12 +171,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
                         })
                         $("#tbodyBtn").html(html);
-
+						var totalPages  = data.caav.count%pageSize==0 ? data.caav.count/pageSize :parseInt(data.caav.count/pageSize)+1;
 						$("#activityPage").bs_pagination({
 							currentPage: pageNumber, // 页码
 							rowsPerPage: pageSize, // 每页显示的记录条数
 							maxRowsPerPage: 20, // 每页最多显示的记录条数
-							totalPages: data.caav.count%pageSize==0 ? data.caav.count/pageSize :parseInt(data.caav.count/pageSize)+1, // 总页数
+							totalPages: totalPages, // 总页数
 							totalRows: data.caav.count, // 总记录条数
 
 							visiblePageLinks: 3, // 显示几个卡片
@@ -188,6 +206,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 </script>
 </head>
 <body>
+	<input type="hidden" id="hidden-owner"/>
+	<input type="hidden" id="hidden-name"/>
+	<input type="hidden" id="hidden-startDate"/>
+	<input type="hidden" id="hidden-endDate"/>
 
 	<!-- 创建市场活动的模态窗口 -->
 	<div class="modal fade" id="createActivityModal" role="dialog">
@@ -352,17 +374,17 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">开始日期</div>
-					  <input class="form-control" type="text" id="serch-startDate" />
+					  <input class="form-control time" type="text" id="serch-startDate"  readonly/>
 				    </div>
 				  </div>
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">结束日期</div>
-					  <input class="form-control" type="text" id="serch-endDate">
+					  <input class="form-control time" type="text" id="serch-endDate" readonly/>
 				    </div>
 				  </div>
 				  
-				  <button type="submit" class="btn btn-default" id="serchBtn">查询</button>
+				  <button type="button" class="btn btn-default" id="serchBtn">查询</button>
 				  
 				</form>
 			</div>
