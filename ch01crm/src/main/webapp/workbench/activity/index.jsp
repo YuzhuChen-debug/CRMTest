@@ -162,7 +162,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
                         var html= "";
 					    $.each(data.caav.aList,function (i,n) {
                             html += '<tr class="active">';
-                            html += '	<td><input type="checkbox"  value="'+n.id+'"/></td>';
+                            html += '	<td><input name="xz" type="checkbox"  value="'+n.id+'"/></td>';
                             html += '	<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'detail.html\';">'+n.name+'</a></td>';
                             html += '	<td>'+n.owner+'</td>';
                             html += '	<td>'+n.startDate+'</td>';
@@ -199,6 +199,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				}
 			})
 		}
+		$("#qx").click(function () {
+            $("input[name=xz]").prop("checked",this.checked);
+        })
+        $("#tbodyBtn").on("click",$("input[name=xz]"),function () {
+            $("#qx").prop("checked",$("input[name=xz]").length==$("input[name=xz]:checked").length);
+        })
 
 		
 	});
@@ -400,7 +406,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				<table class="table table-hover">
 					<thead>
 						<tr style="color: #B3B3B3;">
-							<td><input type="checkbox" /></td>
+							<td><input id="qx" type="checkbox" /></td>
 							<td>名称</td>
                             <td>所有者</td>
 							<td>开始日期</td>
