@@ -54,6 +54,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					$("#create-owner").val(id);
 					$("#createActivityModal").modal("show");
 
+
 				}
 
 			})
@@ -62,12 +63,19 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 		})
 
+
 		$("#saveBtn").click(function () {
 			/*var owner = $.trim($("#create-owner").val());
 			var name = $.trim($("#create-name").val());
 			alert(name);
 			alert(owner);*/
-            $.ajax({
+			save();
+d
+
+		})
+
+		function save(){
+			$.ajax({
 				url:"workbench/Activity/save.do",
 				data:{
 					owner: $.trim($("#create-owner").val()),
@@ -84,19 +92,18 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						"data":{"success":true/false,"msg":msg}
 					* */
 					if(data.success){
-					    //刷新市场活动信息列表
+						//刷新市场活动信息列表
 						pageList(1 ,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
-                        //关闭模态窗口
-                        $("#createActivityModal").modal("hide");
-                    }else{
-					    alert("有问题");
-                    }
+						//关闭模态窗口
+						$("#createActivityModal").modal("hide");
+					}else{
+						alert("有问题");
+					}
 
 				}
 			})
+		}
 
-
-		})
 		//页面杠加载的时候进行查询函数
 		pageList(1 ,2);
 		//点击查询按钮,进行查询函数
