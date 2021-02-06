@@ -12,4 +12,6 @@ public interface ActivityDao {
     int getCount(Map<String, Object> map);
 
     List<Activity> getActivityList(Map<String, Object> map);
+
+    int deleteActivityById(String[] ids);
 }

@@ -121,6 +121,7 @@ d
 		//查询函数,包括条件查询和分页查询
 		//
 		function pageList(pageNumber,pageSize) {
+			$("#qx").prop("checked",false);
 			$("#serch-owner").val($("#hidden-owner").val());
 			$("#serch-owner").val($("#hidden-owner").val());
 			$("#serch-owner").val($("#hidden-owner").val());
@@ -212,6 +213,46 @@ d
         $("#tbodyBtn").on("click",$("input[name=xz]"),function () {
             $("#qx").prop("checked",$("input[name=xz]").length==$("input[name=xz]:checked").length);
         })
+
+		$("#deleteBtn").click(function () {
+			var $xz = $("input[name=xz]:checked");
+			if($xz.length==0){
+				alert("请选择需要删除的选项");
+			}else{
+				if(confirm("您是否要删除所选项")){
+					var param = "";
+					for(var i = 0; i<$xz.length;i++){
+						param += "id=" + $($xz[i]).val();
+						if(i<$xz.length-1){
+							param+="&";
+						}
+					}
+					//这里的id应该加在哪里
+					// alert(param);
+					$.ajax({
+						url:"workbench/Activity/delete.do",
+						data:param,
+						type:"post",
+						dataType:"json",
+						success:function (data) {
+							/*
+                            * 	分析一下我们需要返回什么数值
+                            *  data :{success:true}
+                            *  or data:{success:false,msg:msg}
+                            * */
+							if(data.success){
+								//刷新列表
+								pageList(1,2);
+
+							}else{
+								alert(data.msg);
+							}
+						}
+					})
+				}
+
+			}
+		})
 
 		
 	});
@@ -405,7 +446,7 @@ d
 				<div class="btn-group" style="position: relative; top: 18%;">
 				  <button type="button" class="btn btn-primary" id="createBtn"><span class="glyphicon glyphicon-plus"></span> 创建</button>
 				  <button type="button" class="btn btn-default" id="editBtn"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
-				  <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
+				  <button type="button" class="btn btn-danger" id="deleteBtn"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 				</div>
 				
 			</div>
