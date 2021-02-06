@@ -34,9 +34,31 @@ public class ActivityController extends HttpServlet {
             pageList(request,response);
         }else if("/workbench/Activity/delete.do".equals(path)){
             delete(request,response);
+        }else if("/workbench/Activity/getUserListAndActivity.do".equals(path)){
+            getUserListAndActivity(request,response);
         }
 
 
+
+    }
+
+    private void getUserListAndActivity(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("进入到用户列表查询和市场活动列表查询控制器");
+
+    }
+
+
+    private void userList(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("进入到用户列表查询控制器");
+        UserService us = (UserService) ServiceFactory.getService(new UserServiceImpl());
+        try{
+            List<User> uList = us.userList();
+            PrintJson.printJsonObj(response,uList);
+        }catch (Exception e){
+            e.printStackTrace();
+            String msg = e.getMessage();
+
+        }
 
     }
 
@@ -127,19 +149,6 @@ public class ActivityController extends HttpServlet {
         ActivityService as = (ActivityService) ServiceFactory.getService( new ActivityServiceImp());
         boolean flag = as.save(a);
         PrintJson.printJsonFlag(response,flag);
-    }
-
-    private void userList(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("进入到用户列表查询控制器");
-        UserService us = (UserService) ServiceFactory.getService(new UserServiceImpl());
-        try{
-            List<User> uList = us.userList();
-            PrintJson.printJsonObj(response,uList);
-        }catch (Exception e){
-            e.printStackTrace();
-            String msg = e.getMessage();
-
-        }
     }
 
 
