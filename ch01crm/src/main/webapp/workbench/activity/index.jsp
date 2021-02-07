@@ -255,7 +255,7 @@ d
 		})
 
 		$("#editBtn").click(function () {
-			$("#editActivityModal").modal("show");
+
 			$(".time").datetimepicker({
 				minView: "month",
 				language:  'zh-CN',
@@ -264,36 +264,47 @@ d
 				todayBtn: true,
 				pickerPosition: "bottom-left"
 			});
+			var $xz = $("input[name=xz]:checked");
+			if($xz.length==0){
+				alert("请选择要修改的对象");
+			}else if($xz.length>1){
+				alert("一次只能修改一条");
+			}else{
+				var id = $xz.val();
+				$.ajax({
+					"url":"workbench/Activity/getUserListAndActivity.do",
+					"dataType":"json",
+					"type":"get",
+					data:{
+						id:id
+					},
+					"success":function (data) {
+						/*
+                            data:{uList:[{u1},{u2},{u3}],activity:activity}
+                        */
+						//alert(1);
+						var html = "<option></option>";
+						$.each(data.uList,function (i,n) {
+							html+="<option value='"+n.id+"'>"+n.name+"</option>";
+						})
+						$("#edit-owner").html(html);
+						//把activity列表铺在模块当中对应位置
+						$("#edit-id").val(data.activity.id);
+						$("#edit-owner").val(data.activity.owner);
+						$("#edit-name").val(data.activity.name);
+						$("#edit-startDate").val(data.activity.startDate);
+						$("#edit-endDate").val(data.activity.endDate);
+						$("#edit-cost").val(data.activity.cost);
+						$("#edit-description").val(data.activity.description);
 
-			$.ajax({
-				"url":"workbench/Activity/getUserListAndActivity.do",
-				"dataType":"json",
-				"type":"get",
-				"success":function (data) {
-					/*
-						data:{uList:[{u1},{u2},{u3}],activity:activity}
-					*/
-					//alert(1);
-					var html = "<option></option>";
-					$.each(data.uList,function (i,n) {
-						html+="<option value='"+n.id+"'>"+n.name+"</option>";
-					})
-					$("#edit-owner").html(html);
-					//把activity列表铺在模块当中对应位置
-					$("#edit-id").val(data.activity.id);
-					$("#edit-owner").val(data.activity.owner);
-					$("#edit-name").val(data.activity.name);
-					$("#edit-startDate").val(data.activity.startDate);
-					$("#edit-endDate").val(data.activity.endDate);
-					$("#edit-cost").val(data.activity.cost);
-					$("#edit-description").val(data.activity.description);
-
-					$("#createActivityModal").modal("show");
+						$("#editActivityModal").modal("show");
 
 
-				}
+					}
 
-			})
+				})
+			}
+
 		})
 
 		$("#updateBtn").click(function () {
@@ -432,11 +443,11 @@ d
 						<div class="form-group">
 							<label for="edit-startTime" class="col-sm-2 control-label">开始日期</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control time" id="edit-startDate" >
+								<input type="text" class="form-control time" id="edit-startDate" readonly>
 							</div>
 							<label for="edit-endTime" class="col-sm-2 control-label">结束日期</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control time" id="edit-endDate" >
+								<input type="text" class="form-control time" id="edit-endDate" readonly >
 							</div>
 						</div>
 						

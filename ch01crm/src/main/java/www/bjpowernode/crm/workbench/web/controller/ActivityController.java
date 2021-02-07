@@ -1,5 +1,6 @@
 package www.bjpowernode.crm.workbench.web.controller;
 
+import www.bjpowernode.crm.Exceptions.UserListErrorException;
 import www.bjpowernode.crm.Utils.DateTimeUtil;
 import www.bjpowernode.crm.Utils.PrintJson;
 import www.bjpowernode.crm.Utils.ServiceFactory;
@@ -42,8 +43,12 @@ public class ActivityController extends HttpServlet {
 
     }
 
-    private void getUserListAndActivity(HttpServletRequest request, HttpServletResponse response) {
+    private void getUserListAndActivity(HttpServletRequest request, HttpServletResponse response)  {
         System.out.println("进入到用户列表查询和市场活动列表查询控制器");
+        String id = request.getParameter("id");
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImp());
+            Map<String,Object> map  = as.getUserListAndActivity(id);
+            PrintJson.printJsonObj(response,map);
 
     }
 

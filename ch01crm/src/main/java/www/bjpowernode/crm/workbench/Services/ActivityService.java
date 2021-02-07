@@ -14,4 +14,6 @@ public interface ActivityService {
     CountAndActivityVO<Activity> getCountAndActivity(Map<String, Object> map) throws pageListErrorException;
 
     boolean delete(String[] ids) throws DeleteActivityAndActivityRemarkErrorException;
+
+    Map<String, Object> getUserListAndActivity(String id);
 }

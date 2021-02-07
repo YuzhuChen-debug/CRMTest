@@ -4,17 +4,21 @@ import www.bjpowernode.crm.Exceptions.DeleteActivityAndActivityRemarkErrorExcept
 import www.bjpowernode.crm.Exceptions.pageListErrorException;
 import www.bjpowernode.crm.Utils.SqlSessionUtil;
 import www.bjpowernode.crm.VO.CountAndActivityVO;
+import www.bjpowernode.crm.settings.dao.UserDao;
+import www.bjpowernode.crm.settings.domain.User;
 import www.bjpowernode.crm.workbench.Services.ActivityService;
 import www.bjpowernode.crm.workbench.dao.ActivityDao;
 import www.bjpowernode.crm.workbench.dao.ActivityRemarkDao;
 import www.bjpowernode.crm.workbench.domain.Activity;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class ActivityServiceImp implements ActivityService {
     private ActivityDao activityDao = SqlSessionUtil.getSqlSession().getMapper(ActivityDao.class);
     private ActivityRemarkDao activityRemarkDao = SqlSessionUtil.getSqlSession().getMapper(ActivityRemarkDao.class);
+    private UserDao userDao = SqlSessionUtil.getSqlSession().getMapper(UserDao.class);
     @Override
     public boolean save(Activity a){
         System.out.println("进入到保存活动业务层");
@@ -69,6 +73,16 @@ public class ActivityServiceImp implements ActivityService {
             throw new DeleteActivityAndActivityRemarkErrorException("删除市场活动条数和需要删除的条数不符");
         }
         return success;
+    }
+
+    @Override
+    public Map<String, Object> getUserListAndActivity(String id) {
+        Map<String,Object> map = new HashMap<>();
+        List<User> userList = userDao.userList();
+        Activity activity = activityDao.getActivity(id);
+        map.put("uList",userList);
+        map.put("activity",activity);
+        return map;
     }
 
 
