@@ -113,5 +113,15 @@ public class ActivityServiceImp implements ActivityService {
         return arList;
     }
 
+    @Override
+    public boolean removeRemarkById(String id) throws RemoveRemarkErrorException {
+        boolean success =true;
+        int count = activityRemarkDao.removeRemarkById(id);
+        if(count==-1){
+            throw new RemoveRemarkErrorException("删除市场活动备注失败");
+        }
+        return success;
+    }
+
 
 }

@@ -63,7 +63,33 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			$(this).children("div").children("div").hide();
 		})
 
+
+
 	});
+	function removeRemark(id) {
+        //alert(123);
+        $.ajax({
+            url:"workbench/Activity/removeRemark.do",
+            data:{
+                id:id
+            },
+            dataType:"json",
+            type:"get",
+            success:function (data) {
+                //返回来的数据进行处理
+                /*
+                *   data:{success:true}
+                *   or data:{success:false,msg:msg}
+                * */
+                if(data.success){
+                    $("#"+id).remove();
+                }else{
+                    alert(data.msg);
+                }
+
+            }
+        })
+    }
 
 	function showRemarkDetail() {
 		$.ajax({
@@ -82,7 +108,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				if(data.success){
 					var html = "";
 					$.each(data.arList,function (i,n) {
-						html += '<div class="remarkDiv" style="height: 60px;">';
+						html += '<div id="'+n.id+'" class="remarkDiv" style="height: 60px;">';
 						html += '	<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">';
 						html += '	<div style="position: relative; top: -40px; left: 40px;" >';
 						html += '		<h5>'+n.noteContent+'</h5>';
@@ -90,7 +116,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						html += '		<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;" >';
 						html += '			<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #FF0000;"></span></a>';
 						html += '			&nbsp;&nbsp;&nbsp;&nbsp;';
-						html += '			<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #FF0000;"></span></a>';
+						html += '			<a class="myHref" href="javascript:void(0);" onclick="removeRemark(\''+n.id+'\')"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #FF0000;"></span></a>';
 						html += '		</div>';
 						html += '	</div>';
 						html += '</div>	';

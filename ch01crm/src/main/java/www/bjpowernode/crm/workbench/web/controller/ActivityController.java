@@ -43,10 +43,29 @@ public class ActivityController extends HttpServlet {
             showDetail(request,response);
         }else if("/workbench/Activity/showActivityRemark.do".equals(path)){
             showRemarkDetail(request,response);
+        }else if("/workbench/Activity/removeRemark.do".equals(path)){
+            removeRemark(request,response);
         }
 
 
 
+    }
+
+    private void removeRemark(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("进入到移除市场备注控制器");
+        String id = request.getParameter("id");
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImp());
+        try{
+            boolean success = as.removeRemarkById(id);
+            PrintJson.printJsonFlag(response,success);
+        }catch(Exception e){
+            e.printStackTrace();
+            String msg = e.getMessage();
+            Map<String,Object> map = new HashMap<>();
+            map.put("success",false);
+            map.put("msg",msg);
+            PrintJson.printJsonObj(response,map);
+        }
     }
 
     private void showRemarkDetail(HttpServletRequest request, HttpServletResponse response) {
