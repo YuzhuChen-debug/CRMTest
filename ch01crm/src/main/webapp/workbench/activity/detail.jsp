@@ -55,6 +55,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 		//展现备注信息
 		showRemarkDetail();
+
+		$("#remarkBody").on("mouseover",".remarkDiv",function(){
+			$(this).children("div").children("div").show();
+		})
+		$("#remarkBody").on("mouseout",".remarkDiv",function(){
+			$(this).children("div").children("div").hide();
+		})
+
 	});
 
 	function showRemarkDetail() {
@@ -79,7 +87,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						html += '	<div style="position: relative; top: -40px; left: 40px;" >';
 						html += '		<h5>'+n.noteContent+'</h5>';
 						html += '		<font color="gray">市场活动</font> <font color="gray">-</font> <b>\'${a.name}\'</b> <small style="color: gray;"> '+(n.editFlag=="0"?n.createTime:n.editTime)+' 由'+(n.editFlag=="0"?n.createBy:n.editBy)+'</small>';
-						html += '		<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;">';
+						html += '		<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;" >';
 						html += '			<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #FF0000;"></span></a>';
 						html += '			&nbsp;&nbsp;&nbsp;&nbsp;';
 						html += '			<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #FF0000;"></span></a>';
@@ -258,7 +266,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	</div>
 	
 	<!-- 备注 -->
-	<div style="position: relative; top: 30px; left: 40px;">
+	<div style="position: relative; top: 30px; left: 40px;" id="remarkBody">
 		<div class="page-header">
 			<h4>备注</h4>
 		</div>
