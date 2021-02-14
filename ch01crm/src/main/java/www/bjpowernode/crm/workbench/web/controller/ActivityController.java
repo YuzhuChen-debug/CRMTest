@@ -1,6 +1,5 @@
 package www.bjpowernode.crm.workbench.web.controller;
 
-import www.bjpowernode.crm.Exceptions.UserListErrorException;
 import www.bjpowernode.crm.Utils.DateTimeUtil;
 import www.bjpowernode.crm.Utils.PrintJson;
 import www.bjpowernode.crm.Utils.ServiceFactory;
@@ -12,6 +11,7 @@ import www.bjpowernode.crm.settings.domain.User;
 import www.bjpowernode.crm.workbench.Services.ActivityService;
 import www.bjpowernode.crm.workbench.Services.Imp.ActivityServiceImp;
 import www.bjpowernode.crm.workbench.domain.Activity;
+import www.bjpowernode.crm.workbench.domain.ActivityRemark;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -37,9 +37,86 @@ public class ActivityController extends HttpServlet {
             delete(request,response);
         }else if("/workbench/Activity/getUserListAndActivity.do".equals(path)){
             getUserListAndActivity(request,response);
+        }else if("/workbench/Activity/update.do".equals(path)){
+            update(request,response);
+        }else if("/workbench/Activity/detail.do".equals(path)){
+            showDetail(request,response);
+        }else if("/workbench/Activity/showActivityRemark.do".equals(path)){
+            showRemarkDetail(request,response);
         }
 
 
+
+    }
+
+    private void showRemarkDetail(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("进入显示市场活动备注信息控制器");
+        String aid = request.getParameter("aid");
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImp());
+        try{
+            List<ActivityRemark> arList = as.getActivityRemarkDetailByAid(aid);
+            Map<String,Object> map1 = new HashMap<>();
+            map1.put("success",true);
+            map1.put("arList",arList);
+            PrintJson.printJsonObj(response,map1);
+        }catch (Exception e ){
+            String msg = e.getMessage();
+            e.printStackTrace();
+            Map<String,Object> map = new HashMap<>();
+            map.put("success",false);
+            map.put("msg",msg);
+            PrintJson.printJsonObj(response,map);
+        }
+    }
+
+    private void showDetail(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("进入到显示市场活动详细信息控制器");
+        String id = request.getParameter("id");
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImp());
+        try{
+            Activity a = as.getActivityById(id);
+            request.getSession().setAttribute("a",a);
+            request.getRequestDispatcher("/workbench/activity/detail.jsp").forward(request,response);
+        }catch (Exception e){
+            e.printStackTrace();
+            String msg = e.getMessage();
+        }
+    }
+
+    private void update(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("进入到修改活动信息控制器");
+        //获取市场活动参数信息
+        String id= request.getParameter("id");
+        String owner= request.getParameter("owner");
+        String name= request.getParameter("name");
+        String startDate= request.getParameter("startDate");
+        String endDate= request.getParameter("endDate");
+        String cost= request.getParameter("cost");
+        String description= request.getParameter("description");
+        String editTime= DateTimeUtil.getSysTime();
+        String editBy= ((User)request.getSession().getAttribute("user")).getName();
+        //把信息放到一个map集合当中
+        Activity a = new Activity();
+        a.setId(id);
+        a.setOwner(owner);
+        a.setName(name);
+        a.setStartDate(startDate);
+        a.setEndDate(endDate);
+        a.setCost(cost);
+        a.setDescription(description);
+        a.setCreateBy(editBy);
+        a.setCreateTime(editTime);
+        ActivityService as = (ActivityService) ServiceFactory.getService( new ActivityServiceImp());
+        try{
+            boolean flag = as.update(a);
+            PrintJson.printJsonFlag(response,flag);
+        }catch(Exception e){
+            e.printStackTrace();
+            String msg = e.getMessage();
+            Map<String,Object> map = new HashMap<>();
+            map.put("success",false);
+            map.put("msg",msg);
+        }
 
     }
 

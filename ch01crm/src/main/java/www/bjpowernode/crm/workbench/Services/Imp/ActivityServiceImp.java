@@ -1,7 +1,6 @@
 package www.bjpowernode.crm.workbench.Services.Imp;
 
-import www.bjpowernode.crm.Exceptions.DeleteActivityAndActivityRemarkErrorException;
-import www.bjpowernode.crm.Exceptions.pageListErrorException;
+import www.bjpowernode.crm.Exceptions.*;
 import www.bjpowernode.crm.Utils.SqlSessionUtil;
 import www.bjpowernode.crm.VO.CountAndActivityVO;
 import www.bjpowernode.crm.settings.dao.UserDao;
@@ -10,6 +9,7 @@ import www.bjpowernode.crm.workbench.Services.ActivityService;
 import www.bjpowernode.crm.workbench.dao.ActivityDao;
 import www.bjpowernode.crm.workbench.dao.ActivityRemarkDao;
 import www.bjpowernode.crm.workbench.domain.Activity;
+import www.bjpowernode.crm.workbench.domain.ActivityRemark;
 
 import java.util.HashMap;
 import java.util.List;
@@ -83,6 +83,34 @@ public class ActivityServiceImp implements ActivityService {
         map.put("uList",userList);
         map.put("activity",activity);
         return map;
+    }
+
+    @Override
+    public boolean update(Activity a) throws UpdateActivityErrorException {
+        boolean success = true;
+        int count = activityDao.update(a);
+        if(count==-1){
+            throw new UpdateActivityErrorException("修改市场活动列表错误");
+        }
+        return success;
+    }
+
+    @Override
+    public Activity getActivityById(String id) throws ActivityDetialErrorException {
+        Activity a = activityDao.getActivityById(id);
+        if(a==null){
+            throw new ActivityDetialErrorException("查询市场活动详细信息失败");
+        }
+        return a;
+    }
+
+    @Override
+    public List<ActivityRemark> getActivityRemarkDetailByAid(String aid) throws ActivityRemarkDetailErrorException {
+        List<ActivityRemark> arList = activityRemarkDao.getActivityRemarkDetailByAid(aid);
+        if(arList==null){
+            throw new ActivityRemarkDetailErrorException("获取备注信息错误");
+        }
+        return arList;
     }
 
 

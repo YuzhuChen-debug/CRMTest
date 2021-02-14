@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public interface ActivityDao {
+    public interface ActivityDao {
     int save(Activity a );
 
     int getCount(Map<String, Object> map);
@@ -16,4 +16,8 @@ public interface ActivityDao {
     int deleteActivityById(String[] ids);
 
     Activity getActivity(String id);
-}
+
+    int update(Activity a);
+
+        Activity getActivityById(String id);
+    }

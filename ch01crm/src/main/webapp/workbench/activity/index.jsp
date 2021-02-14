@@ -171,7 +171,7 @@ d
 					    $.each(data.caav.aList,function (i,n) {
                             html += '<tr class="active">';
                             html += '	<td><input name="xz" type="checkbox"  value="'+n.id+'"/></td>';
-                            html += '	<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'detail.html\';">'+n.name+'</a></td>';
+                            html += '	<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/Activity/detail.do?id='+n.id+'\';">'+n.name+'</a></td>';
                             html += '	<td>'+n.owner+'</td>';
                             html += '	<td>'+n.startDate+'</td>';
                             html += '	<td>'+n.endDate+'</td>';
@@ -311,12 +311,13 @@ d
 			$.ajax({
 				url:"workbench/Activity/update.do",
 				data:{
-					owner: $.trim($("#create-owner").val()),
-					name: $.trim($("#create-name").val()),
-					startDate: $.trim($("#create-startDate").val()),
-					endDate: $.trim($("#create-endDate").val()),
-					cost: $.trim($("#create-cost").val()),
-					description:$.trim( $("#create-description").val())
+				    id:$.trim($("#edit-id").val()),
+					owner: $.trim($("#edit-owner").val()),
+					name: $.trim($("#edit-name").val()),
+					startDate: $.trim($("#edit-startDate").val()),
+					endDate: $.trim($("#edit-endDate").val()),
+					cost: $.trim($("#edit-cost").val()),
+					description:$.trim( $("#edit-description").val())
 				},
 				dataType:"json",
 				type:"post",
@@ -326,11 +327,12 @@ d
 					* */
 					if(data.success){
 						//刷新市场活动信息列表
-						pageList(1 ,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
+						pageList($("#activityPage").bs_pagination('getOption', 'currentPage')
+								,$("#activityPage").bs_pagination('getOption', 'rowsPerPage'));
 						//关闭模态窗口
-						$("#createActivityModal").modal("hide");
+						$("#editActivityModal").modal("hide");
 					}else{
-						alert("有问题");
+						alert(data.msg);
 					}
 
 				}
@@ -547,14 +549,14 @@ d
 					<tbody id="tbodyBtn">
 						<%--<tr class="active">
 							<td><input type="checkbox" /></td>
-							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='detail.html';">发传单</a></td>
+							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='detail.jsp';">发传单</a></td>
                             <td>zhangsan</td>
 							<td>2020-10-10</td>
 							<td>2020-10-20</td>
 						</tr>
                         <tr class="active">
                             <td><input type="checkbox" /></td>
-                            <td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='detail.html';">发传单</a></td>
+                            <td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='detail.jsp';">发传单</a></td>
                             <td>zhangsan</td>
                             <td>2020-10-10</td>
                             <td>2020-10-20</td>
