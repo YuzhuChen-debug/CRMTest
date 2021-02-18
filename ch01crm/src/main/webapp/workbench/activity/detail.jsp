@@ -63,9 +63,49 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			$(this).children("div").children("div").hide();
 		})
 
+        $("#updateRemarkBtn").click(function () {
+            //alert("11");
+            updateNoteContent();
+        })
+
 
 
 	});
+
+
+	function updateNoteContent() {
+        //alert(11);
+        var id = $("#remarkId").val();
+        var nodeContent = $.trim($("#noteContent").val());
+        $.ajax({
+            url:"workbench/Activity/updateNodeContent.do",
+            data:{
+                id:id,
+                nodeContent:nodeContent
+            },
+            dataType:"json",
+            type:"post",
+            success:function (data) {
+                //处理返回来的数据
+                /*
+                *   data:{success:true,ar:{备注的对象}}
+                *   or  data{success:false,msg:msg}
+                * */
+                if(data.success){
+                    $("#n"+id).html(data.ar.nodeContent);
+                    html=data.ar.editTime+'由'+data.ar.editBy;
+                    $("#s"+id).html(html);
+                    //关闭模态窗口
+                    $("#editRemarkModal").modal("hide");
+                    //刷新列表
+                    //showRemarkDetail();
+                }else {
+                    alert(data.msg);
+                }
+            }
+        })
+
+    }
 	function removeRemark(id) {
         //alert(123);
         $.ajax({
@@ -91,6 +131,17 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
         })
     }
 
+    function opeanEditRemarkModal(id) {
+	    //给模态窗口隐藏域赋id值
+	    $("#remarkId").val(id);
+	    //把noteContent赋值到testarea当中
+        $("#noteContent").val($("#n"+id).html());
+
+        $("#editRemarkModal").modal("show");
+    }
+
+
+
 	function showRemarkDetail() {
 		$.ajax({
 			url:"workbench/Activity/showActivityRemark.do",
@@ -111,10 +162,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 						html += '<div id="'+n.id+'" class="remarkDiv" style="height: 60px;">';
 						html += '	<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">';
 						html += '	<div style="position: relative; top: -40px; left: 40px;" >';
-						html += '		<h5>'+n.noteContent+'</h5>';
-						html += '		<font color="gray">市场活动</font> <font color="gray">-</font> <b>\'${a.name}\'</b> <small style="color: gray;"> '+(n.editFlag=="0"?n.createTime:n.editTime)+' 由'+(n.editFlag=="0"?n.createBy:n.editBy)+'</small>';
+						html += '		<h5 id="n'+n.id+'">'+n.noteContent+'</h5>';
+						html += '		<font color="gray">市场活动</font> <font color="gray">-</font> <b>\'${a.name}\'</b> <small style="color: gray;" id="s'+n.id+'"> '+(n.editFlag=="0"?n.createTime:n.editTime)+' 由'+(n.editFlag=="0"?n.createBy:n.editBy)+'</small>';
 						html += '		<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;" >';
-						html += '			<a class="myHref" href="javascript:void(0);"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #FF0000;"></span></a>';
+						html += '			<a class="myHref" href="javascript:void(0);" onclick="opeanEditRemarkModal(\''+n.id+'\')"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #FF0000;"></span></a>';
 						html += '			&nbsp;&nbsp;&nbsp;&nbsp;';
 						html += '			<a class="myHref" href="javascript:void(0);" onclick="removeRemark(\''+n.id+'\')"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #FF0000;"></span></a>';
 						html += '		</div>';

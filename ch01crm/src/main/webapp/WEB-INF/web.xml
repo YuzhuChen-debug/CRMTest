@@ -13,6 +13,10 @@
     <filter-name>EcodingFilter</filter-name>
     <url-pattern>*.do</url-pattern>
   </filter-mapping>
+  
+  <listener>
+    <listener-class>www.bjpowernode.crm.Listeners.SysInitLinster</listener-class>
+  </listener>
 <!--登录保护过滤器-->
   <filter>
     <filter-name>LoginFilter</filter-name>

@@ -27,11 +27,24 @@
 
  
   <mappers>
-   
 
-    <mapper resource="www/bjpowernode/crm/workbench/dao/ActivityDao.xml"/>
+
     <mapper resource="www/bjpowernode/crm/settings/dao/UserDao.xml"/>
+    <mapper resource="www/bjpowernode/crm/workbench/dao/ActivityDao.xml"/>
     <mapper resource="www/bjpowernode/crm/workbench/dao/ActivityRemarkDao.xml"/>
+    <mapper resource="www/bjpowernode/crm/workbench/dao/ClueActivityRelationDao.xml"/>
+    <mapper resource="www/bjpowernode/crm/workbench/dao/ClueDao.xml"/>
+    <mapper resource="www/bjpowernode/crm/workbench/dao/ClueRemarkDao.xml"/>
+    <mapper resource="www/bjpowernode/crm/workbench/dao/ContactsActivityRelationDao.xml"/>
+    <mapper resource="www/bjpowernode/crm/workbench/dao/ContactsDao.xml"/>
+    <mapper resource="www/bjpowernode/crm/workbench/dao/ContactsRemarkDao.xml"/>
+    <mapper resource="www/bjpowernode/crm/workbench/dao/CustomerDao.xml"/>
+    <mapper resource="www/bjpowernode/crm/workbench/dao/CustomerRemarkDao.xml"/>
+    <mapper resource="www/bjpowernode/crm/settings/dao/DictionaryTypeDao.xml"/>
+    <mapper resource="www/bjpowernode/crm/settings/dao/DictionaryValueDao.xml"/>
+    <mapper resource="www/bjpowernode/crm/workbench/dao/TranDao.xml"/>
+    <mapper resource="www/bjpowernode/crm/workbench/dao/TranHistoryDao.xml"/>
+
 
   </mappers>
 </configuration>
