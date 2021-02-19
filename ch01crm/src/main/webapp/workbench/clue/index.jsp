@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
 %>
@@ -19,9 +20,80 @@
 <script type="text/javascript">
 
 	$(function(){
+		$("#addBTn").click(function () {
+			$("#createForm")[0].reset("");
+
+			$(".time").datetimepicker({
+				minView: "month",
+				language:  'zh-CN',
+				format: 'yyyy-mm-dd',
+				autoclose: true,
+				todayBtn: true,
+				pickerPosition: "top-left"
+			});
+
+			$.ajax({
+				url:"workbench/Clue/UserList.do",
+				dataType:"json",
+				type:"get",
+				success:function (data) {
+					//分析返回来的数据
+					/*
+						data:[{用户列表1},{用户列表2},{用户列表3}],
+					*/
+					//alert(1);
+					var html = "<option></option>";
+					$.each(data,function (i,n) {
+						html+="<option value='"+n.id+"'>"+n.name+"</option>";
+					})
+					$("#create-owner").html(html);
+					//获取session当中的当前用户信息，设置为默认选项
+					var id = "${user.id}";
+					$("#create-owner").val(id);
+					$("#createClueModal").modal("show");
+				}
+			})
+		})
 		
-		
-		
+		$("#saveBtn").click(function () {
+			$.ajax({
+				url:"workbench/Clue/saveClue.do",
+				data:{
+					"fullname":$.trim($("#create-fullname").val()),
+					"appellation":$.trim($("#create-appellation").val()),
+					"owner":$.trim($("#create-owner").val()),
+					"company":$.trim($("#create-company").val()),
+					"job":$.trim($("#create-job").val()),
+					"email":$.trim($("#create-email").val()),
+					"phone":$.trim($("#create-phone").val()),
+					"website":$.trim($("#create-website").val()),
+					"mphone":$.trim($("#create-mphone").val()),
+					"state":$.trim($("#create-state").val()),
+					"source":$.trim($("#create-source").val()),
+					"description":$.trim($("#create-description").val()),
+					"contactSummary":$.trim($("#create-contactSummary").val()),
+					"nextContactTime":$.trim($("#create-nextContactTime").val()),
+					"address":$.trim($("#create-address").val())
+
+				},
+				dataType:"json",
+				type:"post",
+				success:function (data) {
+					//分析返回的数据
+					/*
+					* 		data:{success:true,}
+					*
+					* */
+					if(data){
+						//刷新列表，跳过
+						//关闭模态窗口
+						$("#createClueModal").modal("hide");
+					}else{
+						alert("错误");
+					}
+				}
+			})
+		})
 	});
 	
 </script>
@@ -39,15 +111,15 @@
 					<h4 class="modal-title" id="myModalLabel">创建线索</h4>
 				</div>
 				<div class="modal-body">
-					<form class="form-horizontal" role="form">
+					<form class="form-horizontal" role="form" id="createForm">
 					
 						<div class="form-group">
 							<label for="create-clueOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 							<div class="col-sm-10" style="width: 300px;">
-								<select class="form-control" id="create-clueOwner">
-								  <option>zhangsan</option>
+								<select class="form-control" id="create-owner">
+								  <%--<option>zhangsan</option>
 								  <option>lisi</option>
-								  <option>wangwu</option>
+								  <option>wangwu</option>--%>
 								</select>
 							</div>
 							<label for="create-company" class="col-sm-2 control-label">公司<span style="font-size: 15px; color: red;">*</span></label>
@@ -59,18 +131,21 @@
 						<div class="form-group">
 							<label for="create-call" class="col-sm-2 control-label">称呼</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<select class="form-control" id="create-call">
+								<select class="form-control" id="create-appellation">
 								  <option></option>
-								  <option>先生</option>
+									<c:forEach items="${appellationList}" var="a">
+										<option value="${a.value}">${a.text}</option>
+									</c:forEach>
+								  <%--<option>先生</option>
 								  <option>夫人</option>
 								  <option>女士</option>
 								  <option>博士</option>
-								  <option>教授</option>
+								  <option>教授</option>--%>
 								</select>
 							</div>
 							<label for="create-surname" class="col-sm-2 control-label">姓名<span style="font-size: 15px; color: red;">*</span></label>
 							<div class="col-sm-10" style="width: 300px;">
-								<input type="text" class="form-control" id="create-surname">
+								<input type="text" class="form-control" id="create-fullname">
 							</div>
 						</div>
 						
@@ -103,15 +178,18 @@
 							</div>
 							<label for="create-status" class="col-sm-2 control-label">线索状态</label>
 							<div class="col-sm-10" style="width: 300px;">
-								<select class="form-control" id="create-status">
+								<select class="form-control" id="create-state">
 								  <option></option>
-								  <option>试图联系</option>
+									<c:forEach items="${clueStateList}" var="c">
+										<option value="${c.value}">${c.text}</option>
+									</c:forEach>
+								 <%-- <option>试图联系</option>
 								  <option>将来联系</option>
 								  <option>已联系</option>
 								  <option>虚假线索</option>
 								  <option>丢失线索</option>
 								  <option>未联系</option>
-								  <option>需要条件</option>
+								  <option>需要条件</option>--%>
 								</select>
 							</div>
 						</div>
@@ -121,7 +199,10 @@
 							<div class="col-sm-10" style="width: 300px;">
 								<select class="form-control" id="create-source">
 								  <option></option>
-								  <option>广告</option>
+									<c:forEach items="${sourceList}" var="s">
+										<option value="${s.value}">${s.text}</option>
+									</c:forEach>
+								 <%-- <option>广告</option>
 								  <option>推销电话</option>
 								  <option>员工介绍</option>
 								  <option>外部介绍</option>
@@ -134,7 +215,7 @@
 								  <option>交易会</option>
 								  <option>web下载</option>
 								  <option>web调研</option>
-								  <option>聊天</option>
+								  <option>聊天</option>--%>
 								</select>
 							</div>
 						</div>
@@ -143,7 +224,7 @@
 						<div class="form-group">
 							<label for="create-describe" class="col-sm-2 control-label">线索描述</label>
 							<div class="col-sm-10" style="width: 81%;">
-								<textarea class="form-control" rows="3" id="create-describe"></textarea>
+								<textarea class="form-control" rows="3" id="create-description"></textarea>
 							</div>
 						</div>
 						
@@ -159,7 +240,7 @@
 							<div class="form-group">
 								<label for="create-nextContactTime" class="col-sm-2 control-label">下次联系时间</label>
 								<div class="col-sm-10" style="width: 300px;">
-									<input type="text" class="form-control" id="create-nextContactTime">
+									<input type="text" class="form-control time" id="create-nextContactTime" readonly>
 								</div>
 							</div>
 						</div>
@@ -179,7 +260,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-					<button type="button" class="btn btn-primary" data-dismiss="modal">保存</button>
+					<button type="button" class="btn btn-primary" id="saveBtn">保存</button>
 				</div>
 			</div>
 		</div>
@@ -443,7 +524,7 @@
 			</div>
 			<div class="btn-toolbar" role="toolbar" style="background-color: #F7F7F7; height: 50px; position: relative;top: 40px;">
 				<div class="btn-group" style="position: relative; top: 18%;">
-				  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createClueModal"><span class="glyphicon glyphicon-plus"></span> 创建</button>
+				  <button type="button" class="btn btn-primary" id="addBTn"><span class="glyphicon glyphicon-plus"></span> 创建</button>
 				  <button type="button" class="btn btn-default" data-toggle="modal" data-target="#editClueModal"><span class="glyphicon glyphicon-pencil"></span> 修改</button>
 				  <button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-minus"></span> 删除</button>
 				</div>
@@ -467,7 +548,7 @@
 					<tbody>
 						<tr>
 							<td><input type="checkbox" /></td>
-							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='workbench/clue/detail.jsp';">李四先生</a></td>
+							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='workbench/clue/detail.do?id=35efbbf6167a4d79921908a11aa4aaf6';">马云先生</a></td>
 							<td>动力节点</td>
 							<td>010-84846003</td>
 							<td>12345678901</td>

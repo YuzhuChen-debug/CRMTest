@@ -53,6 +53,21 @@
     <url-pattern>/workbench/Activity/showActivityRemark.do</url-pattern>
     <url-pattern>/workbench/Activity/removeRemark.do</url-pattern>
   </servlet-mapping>
+
+
+
+  <!--线索servlet-->
+  <servlet>
+    <servlet-name>ClueController</servlet-name>
+    <servlet-class>www.bjpowernode.crm.workbench.web.controller.ClueController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ClueController</servlet-name>
+    <url-pattern>/workbench/Clue/UserList.do</url-pattern>
+    <url-pattern>/workbench/Clue/saveClue.do</url-pattern>
+    <url-pattern>/workbench/clue/detail.do</url-pattern>
+
+  </servlet-mapping>
 </web-app>
 
 
