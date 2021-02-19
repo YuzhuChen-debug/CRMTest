@@ -7,6 +7,14 @@ public class DictionaryValue {
     private String  orderNo;
     private String  typeCode;
 
+    public DictionaryValue(String id, String value, String text, String orderNo, String typeCode) {
+        this.id = id;
+        this.value = value;
+        this.text = text;
+        this.orderNo = orderNo;
+        this.typeCode = typeCode;
+    }
+
     public DictionaryValue() {
     }
 
@@ -58,14 +66,6 @@ public class DictionaryValue {
     }
 
     public void setTypeCode(String typeCode) {
-        this.typeCode = typeCode;
-    }
-
-    public DictionaryValue(String id, String value, String text, String orderNo, String typeCode) {
-        this.id = id;
-        this.value = value;
-        this.text = text;
-        this.orderNo = orderNo;
         this.typeCode = typeCode;
     }
 }

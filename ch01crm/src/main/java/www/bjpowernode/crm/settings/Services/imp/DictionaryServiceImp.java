@@ -12,13 +12,13 @@ import java.util.List;
 import java.util.Map;
 
 public class DictionaryServiceImp implements DictionaryService {
-    private DictionaryTypeDao dictionaryTypeDao = (DictionaryTypeDao) SqlSessionUtil.getSqlSession().getMapper(DictionaryType.class);
-    private DictionaryValueDao dictionaryValueDao = (DictionaryValueDao) SqlSessionUtil.getSqlSession().getMapper(DictionaryValue.class);
+    private DictionaryTypeDao dictionaryTypeDao =  SqlSessionUtil.getSqlSession().getMapper(DictionaryTypeDao.class);
+    private DictionaryValueDao dictionaryValueDao =SqlSessionUtil.getSqlSession().getMapper(DictionaryValueDao.class);
 
     @Override
     public Map<String, List<DictionaryValue>> getDictionaryValueByCode() {
         Map<String,List<DictionaryValue>> map = new HashMap<String,List<DictionaryValue>>();
-        List<DictionaryType> dtList = (List<DictionaryType>) dictionaryTypeDao.getTypeList();
+        List<DictionaryType> dtList = dictionaryTypeDao.getTypeList();
         for(DictionaryType dt:dtList){
             String code = dt.getCode();
             List<DictionaryValue> dvList = dictionaryValueDao.getDictionaryValueList(code);

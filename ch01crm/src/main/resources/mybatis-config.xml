@@ -7,8 +7,8 @@
   <properties resource="jdbc.properties"/>
   
   <typeAliases>
-    <typeAlias alias="DictionaryType" type="www.bjpowernode.crm.settings.domain.DictionaryType"/>
-    <typeAlias alias="DictionaryValue" type="www.bjpowernode.crm.settings.domain.DictionaryValue"/>
+    <typeAlias alias="DT" type="www.bjpowernode.crm.settings.domain.DictionaryType"/>
+    <typeAlias alias="DV" type="www.bjpowernode.crm.settings.domain.DictionaryValue"/>
     <typeAlias alias="User" type="www.bjpowernode.crm.settings.domain.User"/>
     <package name="www.bjpowernode.crm.workbench.domain"/>
 

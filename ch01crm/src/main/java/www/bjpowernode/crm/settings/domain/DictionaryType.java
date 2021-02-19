@@ -5,6 +5,12 @@ public class DictionaryType {
     private String name;
     private String description;
 
+    public DictionaryType(String code, String name, String description) {
+        this.code = code;
+        this.name = name;
+        this.description = description;
+    }
+
     public DictionaryType() {
     }
 
@@ -38,12 +44,6 @@ public class DictionaryType {
     }
 
     public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public DictionaryType(String code, String name, String description) {
-        this.code = code;
-        this.name = name;
         this.description = description;
     }
 }
