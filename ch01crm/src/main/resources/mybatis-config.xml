@@ -7,8 +7,9 @@
   <properties resource="jdbc.properties"/>
   
   <typeAliases>
-  
-  	<package name="www.bjpowernode.crm.settings.domain"/>
+    <typeAlias alias="DictionaryType" type="www.bjpowernode.crm.settings.domain.DictionaryType"/>
+    <typeAlias alias="DictionaryValue" type="www.bjpowernode.crm.settings.domain.DictionaryValue"/>
+    <typeAlias alias="User" type="www.bjpowernode.crm.settings.domain.User"/>
     <package name="www.bjpowernode.crm.workbench.domain"/>
 
   </typeAliases>
@@ -28,8 +29,9 @@
  
   <mappers>
 
-
     <mapper resource="www/bjpowernode/crm/settings/dao/UserDao.xml"/>
+    <mapper resource="www/bjpowernode/crm/settings/dao/DictionaryTypeDao.xml"/>
+    <mapper resource="www/bjpowernode/crm/settings/dao/DictionaryValueDao.xml"/>
     <mapper resource="www/bjpowernode/crm/workbench/dao/ActivityDao.xml"/>
     <mapper resource="www/bjpowernode/crm/workbench/dao/ActivityRemarkDao.xml"/>
     <mapper resource="www/bjpowernode/crm/workbench/dao/ClueActivityRelationDao.xml"/>
@@ -40,13 +42,11 @@
     <mapper resource="www/bjpowernode/crm/workbench/dao/ContactsRemarkDao.xml"/>
     <mapper resource="www/bjpowernode/crm/workbench/dao/CustomerDao.xml"/>
     <mapper resource="www/bjpowernode/crm/workbench/dao/CustomerRemarkDao.xml"/>
-    <mapper resource="www/bjpowernode/crm/settings/dao/DictionaryTypeDao.xml"/>
-    <mapper resource="www/bjpowernode/crm/settings/dao/DictionaryValueDao.xml"/>
     <mapper resource="www/bjpowernode/crm/workbench/dao/TranDao.xml"/>
     <mapper resource="www/bjpowernode/crm/workbench/dao/TranHistoryDao.xml"/>
 
-
   </mappers>
+
 </configuration>
 
 
