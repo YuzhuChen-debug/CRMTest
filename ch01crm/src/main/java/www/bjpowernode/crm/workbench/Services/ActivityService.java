@@ -25,4 +25,6 @@ public interface ActivityService {
     List<ActivityRemark> getActivityRemarkDetailByAid(String aid) throws ActivityRemarkDetailErrorException;
 
     boolean removeRemarkById(String id) throws RemoveRemarkErrorException;
+
+    List<Activity> getActivityListByClueId(String id) throws pageListErrorException;
 }

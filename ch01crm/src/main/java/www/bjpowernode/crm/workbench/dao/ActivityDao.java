@@ -20,4 +20,6 @@ import java.util.Map;
     int update(Activity a);
 
         Activity getActivityById(String id);
+
+        List<Activity> getActivityListByClueId(String id);
     }

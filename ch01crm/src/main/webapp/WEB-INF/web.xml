@@ -66,6 +66,7 @@
     <url-pattern>/workbench/Clue/UserList.do</url-pattern>
     <url-pattern>/workbench/Clue/saveClue.do</url-pattern>
     <url-pattern>/workbench/clue/detail.do</url-pattern>
+    <url-pattern>/workbench/clue/getActivityListByClueId.do</url-pattern>
 
   </servlet-mapping>
 </web-app>

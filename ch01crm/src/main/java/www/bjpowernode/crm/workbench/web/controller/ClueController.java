@@ -8,8 +8,11 @@ import www.bjpowernode.crm.Utils.UUIDUtil;
 import www.bjpowernode.crm.settings.Services.UserService;
 import www.bjpowernode.crm.settings.Services.imp.UserServiceImpl;
 import www.bjpowernode.crm.settings.domain.User;
+import www.bjpowernode.crm.workbench.Services.ActivityService;
 import www.bjpowernode.crm.workbench.Services.ClueService;
+import www.bjpowernode.crm.workbench.Services.Imp.ActivityServiceImp;
 import www.bjpowernode.crm.workbench.Services.Imp.ClueServiceImpl;
+import www.bjpowernode.crm.workbench.domain.Activity;
 import www.bjpowernode.crm.workbench.domain.Clue;
 
 import javax.servlet.ServletException;
@@ -17,7 +20,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ClueController extends HttpServlet {
     protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -29,6 +34,28 @@ public class ClueController extends HttpServlet {
             saveClue(request,response);
         }else if("/workbench/clue/detail.do".equals(path)){
             showCluedetail(request,response);
+        }else if("/workbench/clue/getActivityListByClueId.do".equals(path)){
+            getActivityListByClueId(request,response);
+        }
+    }
+
+    private void getActivityListByClueId(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("通过线索获取市场活动列表");
+        String id = request.getParameter("id");
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImp());
+        try{
+            List<Activity> aList = as.getActivityListByClueId(id);
+            Map<String,Object> map1 = new HashMap<>();
+            map1.put("success",true);
+            map1.put("aList",aList);
+            PrintJson.printJsonObj(response,map1);
+        }catch(Exception e){
+            String msg = e.getMessage();
+            e.printStackTrace();
+            Map<String,Object> map2 = new HashMap<>();
+            map2.put("success",false);
+            map2.put("msg",msg);
+            PrintJson.printJsonObj(response,map2);
         }
     }
 

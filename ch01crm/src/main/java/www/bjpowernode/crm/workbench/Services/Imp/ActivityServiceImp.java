@@ -123,5 +123,15 @@ public class ActivityServiceImp implements ActivityService {
         return success;
     }
 
+    @Override
+    public List<Activity> getActivityListByClueId(String id) throws pageListErrorException {
+        System.out.println("执行通过线索id查询市场活动信息");
+        List<Activity> aList = activityDao.getActivityListByClueId(id);
+        if(aList==null){
+            throw new pageListErrorException("展示市场活动列表错误");
+        }
+        return aList;
+    }
+
 
 }

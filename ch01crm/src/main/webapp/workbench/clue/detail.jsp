@@ -51,7 +51,44 @@
 		$(".myHref").mouseout(function(){
 			$(this).children("span").css("color","#E6E6E6");
 		});
+
+		showActivityListByClueId();
+
 	});
+
+	function showActivityListByClueId() {
+		//alert(123);
+		$.ajax({
+			url:"workbench/clue/getActivityListByClueId.do",
+			data:{
+				id:"${c.id}"
+			},
+			dataType:"JSON",
+			type:"get",
+			success:function (data) {
+				//处理返回的数据
+				/*
+				* 	data:{success:true,aList:[{a1},{a2},{a3}]}
+				*  or  data:{success:false,msg:msg}
+				* */
+				if(data.success){
+					var html ="";
+					$.each(data.aList,function (i,n) {
+						html += '<tr>';
+						html += '	<td>'+n.name+'</td>';
+						html += '	<td>'+n.startDate+'</td>';
+						html += '	<td>'+n.endDate+'</td>';
+						html += '	<td>'+n.owner+'</td>';
+						html += '	<td><a href="javascript:void(0);"  onclick="unbund(\''+n.id+'\')" style="text-decoration: none;"><span class="glyphicon glyphicon-remove"></span>解除关联</a></td>';
+						html += '</tr>';
+					})
+					$("#activityBody").html(html);
+				}else{
+					alert(data.msg);
+				}
+			}
+		})
+	}
 	
 </script>
 
@@ -435,8 +472,8 @@
 							<td></td>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
+					<tbody id="activityBody">
+						<%--<tr>
 							<td>发传单</td>
 							<td>2020-10-10</td>
 							<td>2020-10-20</td>
@@ -449,7 +486,7 @@
 							<td>2020-10-20</td>
 							<td>zhangsan</td>
 							<td><a href="javascript:void(0);"  style="text-decoration: none;"><span class="glyphicon glyphicon-remove"></span>解除关联</a></td>
-						</tr>
+						</tr>--%>
 					</tbody>
 				</table>
 			</div>
