@@ -548,7 +548,7 @@
 					<tbody>
 						<tr>
 							<td><input type="checkbox" /></td>
-							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='workbench/clue/detail.do?id=35efbbf6167a4d79921908a11aa4aaf6';">马云先生</a></td>
+							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='workbench/clue/detail.do?id=0b0b5ec6c06a4606af633384361a2265';">马云先生</a></td>
 							<td>动力节点</td>
 							<td>010-84846003</td>
 							<td>12345678901</td>
