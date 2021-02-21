@@ -27,4 +27,10 @@ public interface ActivityService {
     boolean removeRemarkById(String id) throws RemoveRemarkErrorException;
 
     List<Activity> getActivityListByClueId(String id) throws pageListErrorException;
+
+    List<Activity> showActivityListNotClueId(Map<String, Object> map) throws ActivityDetialErrorException;
+
+    boolean saveActivityRemark(ActivityRemark ar) throws ActivityRemarkDetailErrorException;
+
+    boolean updateNodeContent(ActivityRemark ar) throws ActivityRemarkDetailErrorException;
 }

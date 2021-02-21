@@ -69,19 +69,63 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
         })
 
 
-
+        $("#saveBtn").click(function () {
+            saveActivityRemark();
+        });
 	});
+    function saveActivityRemark() {
+        //alert(111);
+        $.ajax({
+            url:"workbench/Activity/saveActivityRemark.do",
+            data:{
+                noteContent:$.trim($("#remark").val()),
+                activityId:"${a.id}"
+            },
+            dataType:"json",
+            type:"post",
+            success:function (data) {
+                //处理返回的数据
+                /*
+                *   data:{success:true,ar:ar}
+                *   or data:{success:false, msg:msg}
+                * */
+                if(data.success){
+                   // alert(data.ar);
+                    //刷新市场活动备注列表
+                    //showRemarkDetail();
+                    var html = "";
+                    html += '<div id="'+data.ar.id+'" class="remarkDiv" style="height: 60px;">';
+                    html += '	<img title="zhangsan" src="image/user-thumbnail.png" style="width: 30px; height:30px;">';
+                    html += '	<div style="position: relative; top: -40px; left: 40px;" >';
+                    html += '		<h5 id="n'+data.ar.id+'">'+data.ar.noteContent+'</h5>';
+                    html += '		<font color="gray">市场活动</font> <font color="gray">-</font> <b>\'${a.name}\'</b> <small style="color: gray;" id="s'+data.ar.id+'"> '+(data.ar.createTime)+' 由'+(data.ar.createBy)+'</small>';
+                    html += '		<div style="position: relative; left: 500px; top: -30px; height: 30px; width: 100px; display: none;" >';
+                    html += '			<a class="myHref" href="javascript:void(0);" onclick="opeanEditRemarkModal(\''+data.ar.id+'\')"><span class="glyphicon glyphicon-edit" style="font-size: 20px; color: #FF0000;"></span></a>';
+                    html += '			&nbsp;&nbsp;&nbsp;&nbsp;';
+                    html += '			<a class="myHref" href="javascript:void(0);" onclick="removeRemark(\''+data.ar.id+'\')"><span class="glyphicon glyphicon-remove" style="font-size: 20px; color: #FF0000;"></span></a>';
+                    html += '		</div>';
+                    html += '	</div>';
+                    html += '</div>	';
+                    $("#remarkDiv").before(html);
+                    //清空备注栏消息
+                    $("#remark").val("");
 
+                }else{
+                    alert(data.msg);
+                }
+            }
+        })
+    }
 
 	function updateNoteContent() {
         //alert(11);
         var id = $("#remarkId").val();
-        var nodeContent = $.trim($("#noteContent").val());
+        var noteContent = $.trim($("#noteContent").val());
         $.ajax({
             url:"workbench/Activity/updateNodeContent.do",
             data:{
                 id:id,
-                nodeContent:nodeContent
+                noteContent:noteContent
             },
             dataType:"json",
             type:"post",
@@ -92,8 +136,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
                 *   or  data{success:false,msg:msg}
                 * */
                 if(data.success){
-                    $("#n"+id).html(data.ar.nodeContent);
-                    html=data.ar.editTime+'由'+data.ar.editBy;
+                    $("#n"+id).html(data.ar.noteContent);
+                   var html=data.ar.editTime+'由'+data.ar.editBy;
                     $("#s"+id).html(html);
                     //关闭模态窗口
                     $("#editRemarkModal").modal("hide");
@@ -378,10 +422,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		
 		<div id="remarkDiv" style="background-color: #E6E6E6; width: 870px; height: 90px;">
 			<form role="form" style="position: relative;top: 10px; left: 10px;">
-				<textarea id="remark" class="form-control" style="width: 850px; resize : none;" rows="2"  placeholder="添加备注..."></textarea>
+				<textarea id="remark" class="form-control" style="width: 850px; resize : none;" rows="2"  placeholder="添加备注..." ></textarea>
 				<p id="cancelAndSaveBtn" style="position: relative;left: 737px; top: 10px; display: none;">
 					<button id="cancelBtn" type="button" class="btn btn-default">取消</button>
-					<button type="button" class="btn btn-primary">保存</button>
+					<button type="button" class="btn btn-primary" id="saveBtn">保存</button>
 				</p>
 			</form>
 		</div>

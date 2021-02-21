@@ -54,7 +54,115 @@
 
 		showActivityListByClueId();
 
+		$("#bundBtn").click(function () {
+            $("#activitySearchText").focus();
+		    $("#bundModal").modal("show");
+            $("#activitySearchText").keydown(function (event) {
+                if(event.keyCode==13){
+                   // alert(122);
+                    //发送ajax请求，查询activity列表
+                    $.ajax({
+                        url:"workbench/clue/showActivityListNotClueId.do",
+                        data:{
+                            aname:$.trim($("#activitySearchText").val()),
+                            clueId:"${c.id}"
+                        },
+                        dataType:"json",
+                        type:"post",
+                        success:function (data) {
+                            //处理返回的数据
+                            /*
+                            *   data:{success:true,aList:[{a1},{a2},{a3}]}
+                            *   or data:{success:false, msg:msg}
+                            * */
+                            if(data.success){
+                                var html= "";
+                                $.each(data.aList,function (i,n) {
+                                   html += ' <tr>';
+                                   html += '     <td><input name="xz" value="'+n.id+'" type="checkbox"/></td>';
+                                   html += '     <td>'+n.name+'</td>';
+                                   html += '     <td>'+n.startDate+'</td>';
+                                   html += '     <td>'+n.endDate+'</td>';
+                                   html += '     <td>'+n.owner+'</td>';
+                                   html += ' </tr>';
+                                })
+                                $("#activitySearchBody").html(html);
+                            }
+                        }
+                    })
+                    return false;
+                }
+            })
+
+        })
+
+        $("#bundBtn1").click(function () {
+            //alert(111);
+            var $xz = $("input[name=xz]:checked");
+            if($xz==0){
+                alert("请选择要添加的数据")
+            }else{
+                var param = "cid=${c.id}&";
+
+                for(var i=0;i<$xz.length;i++){
+                    param+="aid="+$xz.val();
+                    if(i<$xz.length-1){
+                        param+="&";
+                    }
+                }
+                //alert(param);
+                $.ajax({
+                    url:"workbench/clue/bund.do",
+                    data:param,
+                    dataType:"json",
+                    type:"post",
+                    success:function (data) {
+                        //处理返回的数据
+                        /*
+                        *  data:{success:true}
+                        *  or data:{success:false,msg:msg}
+                        * */
+                        if(data.success){
+                            //清除模态窗口中的全选对勾，模态窗口中的数据，模态窗口中的text中的数
+                            //刷新列表
+                            showActivityListByClueId();
+                            //关闭模态窗口
+                            $("#bundModal").modal("hide");
+                        }else {
+                            alert(data.msg);
+                        }
+                    }
+                })
+
+            }
+
+        })
+
 	});
+	function unbund(id) {
+	    //alert(111);
+        $.ajax({
+            url:"workbench/clue/unbund.do",
+            data:{
+                id:id
+            },
+            dataType:"json",
+            type:"post",
+            success:function (data) {
+                //处理返回的数据
+                /*
+                *       data:{success:true}
+                *       or data:{success:false,msg:msg}
+                * */
+                if(data.success){
+                    //刷新列表
+                    showActivityListByClueId();
+                }else{
+                    alert(data.msg);
+                }
+            }
+        })
+    }
 
 	function showActivityListByClueId() {
 		//alert(123);
@@ -109,7 +217,7 @@
 					<div class="btn-group" style="position: relative; top: 18%; left: 8px;">
 						<form class="form-inline" role="form">
 						  <div class="form-group has-feedback">
-						    <input type="text" class="form-control" style="width: 300px;" placeholder="请输入市场活动名称，支持模糊查询">
+						    <input type="text" class="form-control" id="activitySearchText" style="width: 300px;" placeholder="请输入市场活动名称，支持模糊查询">
 						    <span class="glyphicon glyphicon-search form-control-feedback"></span>
 						  </div>
 						</form>
@@ -117,7 +225,7 @@
 					<table id="activityTable" class="table table-hover" style="width: 900px; position: relative;top: 10px;">
 						<thead>
 							<tr style="color: #B3B3B3;">
-								<td><input type="checkbox"/></td>
+								<td><input  name="qx" type="checkbox"/></td>
 								<td>名称</td>
 								<td>开始日期</td>
 								<td>结束日期</td>
@@ -125,8 +233,8 @@
 								<td></td>
 							</tr>
 						</thead>
-						<tbody>
-							<tr>
+						<tbody id="activitySearchBody">
+							<%--<tr>
 								<td><input type="checkbox"/></td>
 								<td>发传单</td>
 								<td>2020-10-10</td>
@@ -139,13 +247,13 @@
 								<td>2020-10-10</td>
 								<td>2020-10-20</td>
 								<td>zhangsan</td>
-							</tr>
+							</tr>--%>
 						</tbody>
 					</table>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-					<button type="button" class="btn btn-primary" data-dismiss="modal">关联</button>
+					<button type="button" class="btn btn-primary" id="bundBtn1">关联</button>
 				</div>
 			</div>
 		</div>
@@ -492,7 +600,7 @@
 			</div>
 			
 			<div>
-				<a href="javascript:void(0);" data-toggle="modal" data-target="#bundModal" style="text-decoration: none;"><span class="glyphicon glyphicon-plus"></span>关联市场活动</a>
+				<a href="javascript:void(0);" id="bundBtn" style="text-decoration: none;"><span class="glyphicon glyphicon-plus"></span>关联市场活动</a>
 			</div>
 		</div>
 	</div>

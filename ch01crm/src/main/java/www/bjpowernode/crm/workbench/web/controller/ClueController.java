@@ -36,6 +36,94 @@ public class ClueController extends HttpServlet {
             showCluedetail(request,response);
         }else if("/workbench/clue/getActivityListByClueId.do".equals(path)){
             getActivityListByClueId(request,response);
+        }else if("/workbench/clue/unbund.do".equals(path)){
+            unbund(request,response);
+        }else if("/workbench/clue/showActivityListNotClueId.do".equals(path)){
+            showActivityListNotClueId(request,response);
+        }else if("/workbench/clue/bund.do".equals(path)){
+            bund(request,response);
+        }else if("/workbench/Clue/showClueList.do".equals(path)){
+            showClueList(request,response);
+        }
+    }
+
+    private void showClueList(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("执行展示线索列表");
+        ClueService cs = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+        try{
+            List<Clue> cList = cs.showClueList();
+            Map<String,Object> map1 = new HashMap<>();
+            map1.put("success",true);
+            map1.put("cList",cList);
+            PrintJson.printJsonObj(response,map1);
+        }catch(Exception e){
+            String msg = e.getMessage();
+            e.printStackTrace();
+            Map<String,Object> map2 = new HashMap<>();
+            map2.put("success",false);
+            map2.put("msg",msg);
+            PrintJson.printJsonObj(response,map2);
+        }
+    }
+
+    private void bund(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("进入到关联市场活动操作");
+        String cid = request.getParameter("cid");
+        String aids[] = request.getParameterValues("aid");
+        ClueService cs = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+        try{
+            boolean success = cs.bund(cid,aids);
+            PrintJson.printJsonFlag(response,success);
+        }catch (Exception e){
+            String msg = e.getMessage();
+            e.printStackTrace();
+            Map<String,Object> map2 = new HashMap<>();
+            map2.put("success",false);
+            map2.put("msg",msg);
+            PrintJson.printJsonObj(response,map2);
+        }
+    }
+
+    private void showActivityListNotClueId(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("查询没有关联线索id的市场活动列表");
+        String clueId = request.getParameter("clueId");
+        String aname = request.getParameter("aname");
+        Map<String,Object> map = new HashMap<>();
+        map.put("clueId",clueId);
+        map.put("aname",aname);
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImp());
+        try{
+            List<Activity> aList = as.showActivityListNotClueId(map);
+            Map<String,Object> map1 = new HashMap<>();
+            map1.put("success",true);
+            map1.put("aList",aList);
+            PrintJson.printJsonObj(response,map1);
+        }catch(Exception e){
+            String msg = e.getMessage();
+            e.printStackTrace();
+            Map<String,Object> map2 = new HashMap<>();
+            map2.put("success",false);
+            map2.put("msg",msg);
+            PrintJson.printJsonObj(response,map2);
+        }
+
+    }
+
+    private void unbund(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("执行解除市场关联操作");
+        String id = request.getParameter("id");
+        ClueService cs = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+        try{
+            boolean success = cs.unbund(id);
+            PrintJson.printJsonFlag(response,success);
+        }catch(Exception e){
+            e.printStackTrace();
+            String msg = e.getMessage();
+            Map<String,Object> map = new HashMap<>();
+            map.put("success",false);
+            map.put("msg",msg);
+            PrintJson.printJsonObj(response,map);
+
         }
     }
 

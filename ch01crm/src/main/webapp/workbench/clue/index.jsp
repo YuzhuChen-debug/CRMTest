@@ -86,6 +86,7 @@
 					* */
 					if(data){
 						//刷新列表，跳过
+						showClueList();
 						//关闭模态窗口
 						$("#createClueModal").modal("hide");
 					}else{
@@ -94,7 +95,44 @@
 				}
 			})
 		})
+
+		showClueList();
 	});
+
+	function showClueList() {
+		//alert("展示Clue列表");
+		$.ajax({
+			url:"workbench/Clue/showClueList.do",
+			dataType:"json",
+			type:"get",
+			success:function (data) {
+				//分析返回来的数据
+				/*
+                    data:{success:true, cList:[{c1},{c2},{c3}]}
+                    or data:{success:false ,msg:msg}
+                */
+				if(data.success){
+					var html = "";
+					$.each(data.cList,function (i,n) {
+						html += '<tr class="active">';
+						html += '	<td><input  name="xz" value="'+n.id+'" type="checkbox" /></td>';
+						html += '	<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/clue/detail.do?id='+n.id+'\';">'+n.fullname+'</a></td>';
+						html += '	<td>'+n.company+'</td>';
+						html += '	<td>'+n.phone+'</td>';
+						html += '	<td>'+n.mphone+'</td>';
+						html += '	<td>'+n.source+'</td>';
+						html += '	<td>'+n.owner+'</td>';
+						html += '	<td>'+n.state+'</td>';
+						html += '</tr>';
+					})
+					$("#clueBody").html(html);
+				}else{
+					alert(data.msg);
+				}
+
+			}
+		})
+	}
 	
 </script>
 </head>
@@ -545,10 +583,10 @@
 							<td>线索状态</td>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
+					<tbody id="clueBody">
+						<%--<tr>
 							<td><input type="checkbox" /></td>
-							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='workbench/clue/detail.do?id=0b0b5ec6c06a4606af633384361a2265';">马云先生</a></td>
+							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='workbench/clue/detail.do?id=35efbbf6167a4d79921908a11aa4aaf6';">马云先生</a></td>
 							<td>动力节点</td>
 							<td>010-84846003</td>
 							<td>12345678901</td>
@@ -565,7 +603,7 @@
                             <td>广告</td>
                             <td>zhangsan</td>
                             <td>已联系</td>
-                        </tr>
+                        </tr>--%>
 					</tbody>
 				</table>
 			</div>

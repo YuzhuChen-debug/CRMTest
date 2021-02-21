@@ -22,4 +22,6 @@ import java.util.Map;
         Activity getActivityById(String id);
 
         List<Activity> getActivityListByClueId(String id);
+
+        List<Activity> showActivityListNotClueId(Map<String, Object> map);
     }

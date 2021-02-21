@@ -45,10 +45,76 @@ public class ActivityController extends HttpServlet {
             showRemarkDetail(request,response);
         }else if("/workbench/Activity/removeRemark.do".equals(path)){
             removeRemark(request,response);
+        }else if("/workbench/Activity/saveActivityRemark.do".equals(path)){
+            saveActivityRemark(request,response);
+        }else if("/workbench/Activity/updateNodeContent.do".equals(path)){
+            updateNodeContent(request,response);
         }
 
 
 
+    }
+
+    private void updateNodeContent(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("执行修改市场活动备注操作");
+        String id= request.getParameter("id");
+        String noteContent = request.getParameter("noteContent");
+        String editTime = DateTimeUtil.getSysTime();
+        String editBy= ((User)request.getSession().getAttribute("user")).getName();
+        String editFlag = "1";
+        ActivityRemark ar = new ActivityRemark();
+        ar.setId(id);
+        ar.setEditFlag(editFlag);
+        ar.setNoteContent(noteContent);
+        ar.setEditBy(editBy);
+        ar.setEditTime(editTime);
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImp());
+        try{
+            boolean success = as.updateNodeContent(ar);
+            Map<String,Object> map1 = new HashMap<>();
+            map1.put("success",success);
+            map1.put("ar",ar);
+            PrintJson.printJsonObj(response,map1);
+        }catch(Exception e){
+            e.printStackTrace();
+            String msg = e.getMessage();
+            Map<String,Object> map = new HashMap<>();
+            map.put("success",false);
+            map.put("msg",msg);
+            PrintJson.printJsonObj(response,map);
+        }
+    }
+
+    private void saveActivityRemark(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("执行保存市场活动备注信息操作");
+        String noteContent = request.getParameter("noteContent");
+        String activityId = request.getParameter("activityId");
+        String id = UUIDUtil.getUUID();
+        String createTime = DateTimeUtil.getSysTime();
+        String createBy =((User)request.getSession().getAttribute("user")).getName();
+        String editFlag = "0";
+        ActivityRemark ar = new ActivityRemark();
+        ar.setId(id);
+        ar.setEditFlag(editFlag);
+        ar.setActivityId(activityId);
+        ar.setNoteContent(noteContent);
+        ar.setCreateBy(createBy);
+        ar.setCreateTime(createTime);
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImp());
+        try{
+            boolean success = as.saveActivityRemark(ar);
+            Map<String,Object> map1 = new HashMap<>();
+            map1.put("success",success);
+            map1.put("ar",ar);
+            PrintJson.printJsonObj(response,map1);
+        }catch(Exception e){
+            e.printStackTrace();
+            String msg = e.getMessage();
+            Map<String,Object> map = new HashMap<>();
+            map.put("success",false);
+            map.put("msg",msg);
+            PrintJson.printJsonObj(response,map);
+        }
     }
 
     private void removeRemark(HttpServletRequest request, HttpServletResponse response) {

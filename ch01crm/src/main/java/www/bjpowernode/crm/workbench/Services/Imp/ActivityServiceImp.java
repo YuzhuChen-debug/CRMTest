@@ -133,5 +133,33 @@ public class ActivityServiceImp implements ActivityService {
         return aList;
     }
 
+    @Override
+    public List<Activity> showActivityListNotClueId(Map<String, Object> map) throws ActivityDetialErrorException {
+        List<Activity> aList = activityDao.showActivityListNotClueId(map);
+        if(aList==null){
+            throw new ActivityDetialErrorException("查询市场活动列表失败");
+        }
+        return aList;
+    }
+
+    @Override
+    public boolean saveActivityRemark(ActivityRemark ar) throws ActivityRemarkDetailErrorException {
+        boolean success = true;
+        int count = activityRemarkDao.saveActivityRemark(ar);
+        if(count!=1){
+            throw new ActivityRemarkDetailErrorException("添加市场活动备注失败");
+        }
+        return success;
+    }
+
+    @Override
+    public boolean updateNodeContent(ActivityRemark ar) throws ActivityRemarkDetailErrorException {
+        int count = activityRemarkDao.updateNodeContent(ar);
+        if(count!=1){
+            throw new ActivityRemarkDetailErrorException("修改市场活动备注错误");
+        }
+        return true;
+    }
+
 
 }
