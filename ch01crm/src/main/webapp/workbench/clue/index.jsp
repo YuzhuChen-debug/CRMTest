@@ -111,12 +111,14 @@
                     data:{success:true, cList:[{c1},{c2},{c3}]}
                     or data:{success:false ,msg:msg}
                 */
+				<!--注释-->
+
 				if(data.success){
 					var html = "";
 					$.each(data.cList,function (i,n) {
 						html += '<tr class="active">';
 						html += '	<td><input  name="xz" value="'+n.id+'" type="checkbox" /></td>';
-						html += '	<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/clue/detail.do?id='+n.id+'\';">'+n.fullname+'</a></td>';
+						html += '	<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/clue/detail.do?id='+n.id+'\';">'+n.fullname+''+n.appellation+'</a></td>';
 						html += '	<td>'+n.company+'</td>';
 						html += '	<td>'+n.phone+'</td>';
 						html += '	<td>'+n.mphone+'</td>';
