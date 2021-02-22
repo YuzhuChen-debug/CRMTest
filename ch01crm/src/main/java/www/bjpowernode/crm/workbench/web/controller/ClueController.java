@@ -14,6 +14,7 @@ import www.bjpowernode.crm.workbench.Services.Imp.ActivityServiceImp;
 import www.bjpowernode.crm.workbench.Services.Imp.ClueServiceImpl;
 import www.bjpowernode.crm.workbench.domain.Activity;
 import www.bjpowernode.crm.workbench.domain.Clue;
+import www.bjpowernode.crm.workbench.domain.Tran;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -44,6 +45,62 @@ public class ClueController extends HttpServlet {
             bund(request,response);
         }else if("/workbench/Clue/showClueList.do".equals(path)){
             showClueList(request,response);
+        }else if("/workbench/Clue/showActivityList.do".equals(path)){
+            showActivityList(request,response);
+        }else if("/workbench/Clue/clueTran.do".equals(path)){
+            convert(request,response);
+        }
+    }
+
+    private void convert(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        System.out.println("执行转换操作");
+        String flag = request.getParameter("flag");
+        String clueId = request.getParameter("clueId");
+        Tran t = null;
+        if("0".equals(flag)){
+            t=new Tran();
+            String money = request.getParameter("money");
+            String name = request.getParameter("name");
+            String expectedDate = request.getParameter("expectedDate");
+            String stage = request.getParameter("stage");
+            String activityId = request.getParameter("activityId");
+            String id = UUIDUtil.getUUID();
+            String createTime = DateTimeUtil.getSysTime();
+            String createBy = ((User)request.getSession().getAttribute("user")).getName();
+            t.setCreateBy(createBy);
+            t.setCreateTime(createTime);
+            t.setId(id);
+            t.setActivityId(activityId);
+            t.setMoney(money);
+            t.setStage(stage);
+            t.setName(name);
+            t.setExpectedDate(expectedDate);
+        }
+        String createBy = ((User)request.getSession().getAttribute("user")).getName();
+        ClueService cs = (ClueService) ServiceFactory.getService(new ClueServiceImpl());
+        boolean success = cs.convert(clueId,t,createBy);
+        if(success){
+            response.sendRedirect(request.getContextPath()+"workbench/clue/index.jsp");
+        }
+    }
+
+    private void showActivityList(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("执行根据名称查询市场活动列表操作");
+        String name = request.getParameter("name");
+        ActivityService as = (ActivityService) ServiceFactory.getService(new ActivityServiceImp());
+        try{
+            List<Activity> aList = as.showActivityList(name);
+            Map<String,Object> map1 = new HashMap<>();
+            map1.put("success",true);
+            map1.put("aList",aList);
+            PrintJson.printJsonObj(response,map1);
+        }catch(Exception e){
+            String msg = e.getMessage();
+            e.printStackTrace();
+            Map<String,Object> map2 = new HashMap<>();
+            map2.put("success",false);
+            map2.put("msg",msg);
+            PrintJson.printJsonObj(response,map2);
         }
     }
 

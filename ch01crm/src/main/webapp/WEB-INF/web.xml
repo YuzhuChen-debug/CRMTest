@@ -73,6 +73,8 @@
     <url-pattern>/workbench/clue/showActivityListNotClueId.do</url-pattern>
     <url-pattern>/workbench/clue/bund.do</url-pattern>
     <url-pattern>/workbench/Clue/showClueList.do</url-pattern>
+    <url-pattern>/workbench/Clue/showActivityList.do</url-pattern>
+    <url-pattern>/workbench/Clue/clueTran.do</url-pattern>
 
   </servlet-mapping>
 </web-app>

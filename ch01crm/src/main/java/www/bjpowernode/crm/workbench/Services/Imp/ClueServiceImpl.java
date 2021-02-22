@@ -8,6 +8,7 @@ import www.bjpowernode.crm.workbench.Services.ClueService;
 import www.bjpowernode.crm.workbench.dao.ClueDao;
 import www.bjpowernode.crm.workbench.domain.Clue;
 import www.bjpowernode.crm.workbench.domain.ClueActivityRelation;
+import www.bjpowernode.crm.workbench.domain.Tran;
 
 import java.util.List;
 
@@ -63,5 +64,11 @@ public class ClueServiceImpl implements ClueService {
             throw new ClueErrorException("查询线索列表错误");
         }
         return cList;
+    }
+
+    @Override
+    public boolean convert(String clueId, Tran t, String createBy) {
+
+        return false;
     }
 }

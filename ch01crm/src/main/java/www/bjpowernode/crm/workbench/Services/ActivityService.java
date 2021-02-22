@@ -33,4 +33,6 @@ public interface ActivityService {
     boolean saveActivityRemark(ActivityRemark ar) throws ActivityRemarkDetailErrorException;
 
     boolean updateNodeContent(ActivityRemark ar) throws ActivityRemarkDetailErrorException;
+
+    List<Activity> showActivityList(String name) throws ActivityDetialErrorException;
 }

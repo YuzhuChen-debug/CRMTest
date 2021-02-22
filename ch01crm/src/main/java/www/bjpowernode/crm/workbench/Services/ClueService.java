@@ -3,6 +3,7 @@ package www.bjpowernode.crm.workbench.Services;
 
 import www.bjpowernode.crm.Exceptions.ClueErrorException;
 import www.bjpowernode.crm.workbench.domain.Clue;
+import www.bjpowernode.crm.workbench.domain.Tran;
 
 import java.util.List;
 
@@ -18,4 +19,6 @@ public interface ClueService {
     boolean bund(String cid, String[] aid) throws ClueErrorException;
 
     List<Clue> showClueList() throws ClueErrorException;
+
+    boolean convert(String clueId, Tran t, String createBy);
 }

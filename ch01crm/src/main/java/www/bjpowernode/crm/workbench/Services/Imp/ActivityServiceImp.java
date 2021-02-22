@@ -161,5 +161,15 @@ public class ActivityServiceImp implements ActivityService {
         return true;
     }
 
+    @Override
+    public List<Activity> showActivityList(String name) throws ActivityDetialErrorException {
+        List<Activity> aList = activityDao.getActivityListByname(name);
+        System.out.println(name);
+        if(aList==null){
+            throw new ActivityDetialErrorException("查询没有结果");
+        }
+        return aList;
+    }
+
 
 }
