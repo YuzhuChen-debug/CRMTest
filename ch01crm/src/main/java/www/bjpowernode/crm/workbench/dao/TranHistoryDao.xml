@@ -6,7 +6,7 @@
 <mapper namespace="www.bjpowernode.crm.workbench.dao.TranHistoryDao">
 	
   	<insert id="addTranHistory">
-        insert int tbl_tran_history (
+        insert into tbl_tran_history (
             id,
             stage,
             money,

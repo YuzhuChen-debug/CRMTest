@@ -87,7 +87,17 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			}
 		})
 
+		$(".time").datetimepicker({
+			minView: "month",
+			language:  'zh-CN',
+			format: 'yyyy-mm-dd',
+			autoclose: true,
+			todayBtn: true,
+			pickerPosition: "bottom-left"
+		});
+
 		$("#btn").click(function () {
+
 			//alert(2);
 			if($("#isCreateTransaction").prop("checked")){
 				//alert(11);
@@ -174,7 +184,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	<div id="create-transaction2" style="position: relative; left: 40px; top: 20px; width: 80%; background-color: #F7F7F7; display: none;" >
 	
 		<form id="tranForm" action="workbench/Clue/clueTran.do" method="post">
-			<input type="hidden" name="falg" value="0">
+			<input type="hidden" name="flag" value="0">
 			<input type="hidden" name="clueId" value="${param.id}">
 		  <div class="form-group" style="width: 400px; position: relative; left: 20px;">
 		    <label for="amountOfMoney">金额</label>
@@ -186,7 +196,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		  </div>
 		  <div class="form-group" style="width: 400px;position: relative; left: 20px;">
 		    <label for="expectedClosingDate">预计成交日期</label>
-		    <input type="text" class="form-control" id="expectedClosingDate" name="expectedDate">
+		    <input type="text" class="form-control time" readonly id="expectedClosingDate" name="expectedDate">
 		  </div>
 		  <div class="form-group" style="width: 400px;position: relative; left: 20px;">
 		    <label for="stage">阶段</label>

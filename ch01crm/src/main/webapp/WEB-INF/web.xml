@@ -77,6 +77,17 @@
     <url-pattern>/workbench/Clue/clueTran.do</url-pattern>
 
   </servlet-mapping>
+
+
+  <!--交易servlet-->
+  <servlet>
+    <servlet-name>TransactionController</servlet-name>
+    <servlet-class>www.bjpowernode.crm.workbench.web.controller.TransactionController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>TransactionController</servlet-name>
+    <url-pattern>/workbench/transaction/create.do</url-pattern>
+  </servlet-mapping>
 </web-app>
 
 

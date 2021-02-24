@@ -108,7 +108,7 @@ public class ClueServiceImpl implements ClueService {
                 customer.setName(company);
                 int count1 = customerDao.addNewCustomer(customer);
                 if(count1!=1){
-                    boolean falg = false;
+                     flag = false;
                 }
 
 

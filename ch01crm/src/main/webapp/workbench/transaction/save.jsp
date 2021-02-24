@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
 %>
@@ -132,9 +133,13 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<label for="create-transactionOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
 				<select class="form-control" id="create-transactionOwner">
-				  <option>zhangsan</option>
+					<option></option>
+					<c:forEach var="c" items="${uList}">
+						<option value="${c.id}">${c.name}</option>
+					</c:forEach>
+				  <%--<option>zhangsan</option>
 				  <option>lisi</option>
-				  <option>wangwu</option>
+				  <option>wangwu</option>--%>
 				</select>
 			</div>
 			<label for="create-amountOfMoney" class="col-sm-2 control-label">金额</label>
