@@ -3,9 +3,28 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.bjpowernode.crm.workbench.dao.TranHistoryDao">
+<mapper namespace="www.bjpowernode.crm.workbench.dao.TranHistoryDao">
 	
-  	
+  	<insert id="addTranHistory">
+        insert int tbl_tran_history (
+            id,
+            stage,
+            money,
+            expectedDate,
+            createTime,
+            createBy,
+            tranId
+
+        )values (
+            #{id},
+            #{stage},
+            #{money},
+            #{expectedDate},
+            #{createTime},
+            #{createBy},
+            #{tranId}
+        )
+    </insert>
 </mapper>
 
 

@@ -88,8 +88,7 @@ public class ClueServiceImpl implements ClueService {
         boolean flag = true;
         //  我们的目的是把线索转换成联系人和客户,线索的关系表和备注表转换成联系人和客户的关系和备注表
         //(1) 获取到线索id，通过线索id获取线索对象（线索对象当中封装了线索的信息）
-
-            Clue clue = clueDao.getClueListByClueId();
+            Clue clue = clueDao.getClueListByClueId(clueId);
         //(2) 通过线索对象提取客户信息，当该客户不存在的时候，新建客户（根据公司的名称精确匹配，判断该客户是否存在！）
             String company = clue.getCompany();
             Customer customer = customerDao.getCustomerByname(company);
@@ -106,7 +105,8 @@ public class ClueServiceImpl implements ClueService {
                 customer.setContactSummary(clue.getContactSummary());
                 customer.setCreateTime(DateTimeUtil.getSysTime());
                 customer.setCreateBy(createBy);
-                int count1 = CustomerDao.addNewCustomer();
+                customer.setName(company);
+                int count1 = customerDao.addNewCustomer(customer);
                 if(count1!=1){
                     boolean falg = false;
                 }
@@ -216,7 +216,7 @@ public class ClueServiceImpl implements ClueService {
         //查询线索备注条数,如果查询结果为-1 报错，如果查询条数和删除条数不一致，报错,
         int count8 = clueRemarkDao.deleteClueRemarkByClueId(clueId);
         //(9) 删除线索和市场活动的关系,同理，查询关系条数，为-1，报错，如果数量不一致，报错
-        int count9 = clueActivityRelationList.deleteByClueId(clueId);
+        int count9 = clueActivityRelationDao.deleteByClueId(clueId);
         //(10) 删除线索
         int count10 = clueDao.delete(clueId);
 

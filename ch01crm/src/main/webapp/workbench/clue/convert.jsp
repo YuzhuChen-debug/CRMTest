@@ -93,7 +93,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				//alert(11);
 				$("#tranForm").submit();
 			}else{
-				window.location.href="workbench/Clue/clueTran.do?clueId=${param.clueId}";
+				window.location.href="workbench/Clue/clueTran.do?clueId=${param.id}";
 			}
 		})
 	});
@@ -175,7 +175,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	
 		<form id="tranForm" action="workbench/Clue/clueTran.do" method="post">
 			<input type="hidden" name="falg" value="0">
-			<input type="hidden" name="clueId" value="${param.clueId}">
+			<input type="hidden" name="clueId" value="${param.id}">
 		  <div class="form-group" style="width: 400px; position: relative; left: 20px;">
 		    <label for="amountOfMoney">金额</label>
 		    <input type="text" class="form-control" id="amountOfMoney" name="money">

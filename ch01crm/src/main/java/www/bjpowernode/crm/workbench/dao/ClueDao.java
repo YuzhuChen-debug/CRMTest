@@ -17,4 +17,8 @@ public interface ClueDao {
     int bund(ClueActivityRelation car);
 
     List<Clue> getClueList();
+
+    Clue getClueListByClueId(String clueId);
+
+    int delete(String clueId);
 }
