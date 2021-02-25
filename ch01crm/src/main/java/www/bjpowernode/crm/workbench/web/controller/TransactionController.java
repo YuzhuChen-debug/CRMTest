@@ -1,10 +1,13 @@
 package www.bjpowernode.crm.workbench.web.controller;
 
 import www.bjpowernode.crm.Exceptions.UserListErrorException;
+import www.bjpowernode.crm.Utils.PrintJson;
 import www.bjpowernode.crm.Utils.ServiceFactory;
 import www.bjpowernode.crm.settings.Services.UserService;
 import www.bjpowernode.crm.settings.Services.imp.UserServiceImpl;
 import www.bjpowernode.crm.settings.domain.User;
+import www.bjpowernode.crm.workbench.Services.Imp.TranServiceImpl;
+import www.bjpowernode.crm.workbench.Services.TranService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,9 +23,17 @@ public class TransactionController extends HttpServlet {
         String path =request.getServletPath();
         if("/workbench/transaction/create.do".equals(path)){
             createPage(request,response);
-        }else if("/workbench/transaction/xxx.do".equals(path)){
-            //xxx(request,response);
+        }else if("/workbench/transaction/getCustomerName.do".equals(path)){
+            getCustomerName(request,response);
         }
+    }
+
+    private void getCustomerName(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("执行查询用户名称操作");
+        String name = request.getParameter("name");
+        TranService ts = (TranService) ServiceFactory.getService(new TranServiceImpl());
+        List<String> nameList =  ts.getCustomerName(name);
+        PrintJson.printJsonObj(response,nameList);
     }
 
     private void createPage(HttpServletRequest request, HttpServletResponse response) {
