@@ -8,9 +8,7 @@ import www.bjpowernode.crm.settings.domain.DictionaryValue;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class SysInitLinster implements ServletContextListener {
     @Override
@@ -37,6 +35,18 @@ public class SysInitLinster implements ServletContextListener {
             //把数据字典放到全局对象当中
             application.setAttribute(key,map.get(key));
         }
-
+        //--------------------------------------------------------
+        //获取可能性和交易阶段关系表
+        ResourceBundle rb = ResourceBundle.getBundle("Stage2Possibility");
+        //取出迭代器
+        Map<String,String> pmap = new HashMap<>();
+        Enumeration<String> it = rb.getKeys();
+        while(it.hasMoreElements()){
+            //取出每一个stage和properity 放到
+            String key = it.nextElement();
+            String value =rb.getString(key);
+            pmap.put(key,value);
+        }
+        application.setAttribute("pmap",pmap);
     }
 }

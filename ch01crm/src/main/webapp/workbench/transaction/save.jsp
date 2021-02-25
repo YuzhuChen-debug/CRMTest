@@ -1,7 +1,13 @@
+<%@ page import="java.util.Map" %>
+<%@ page import="java.util.Set" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
+	Map<String,String> pmap = (Map<String, String>) application.getAttribute("pmap");
+	//现在pmap当中是｛stage,properity｝
+	Set<String> set = pmap.keySet();
+
 %>
 <!DOCTYPE html>
 <html>
@@ -20,6 +26,20 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 </head>
 <body>
 <script>
+	var json = {
+		<%
+		for(String key:set){
+			String value = pmap.get(key);
+		%>
+			"<%=key%>":<%=value%>,
+		<%
+		}
+		%>
+	}
+	//alert(json);
+
+
+
 	$(function () {
 		$("#create-customerName").typeahead({
 			source: function (query, process) {
@@ -35,6 +55,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			},
 			delay: 1500
 		});
+
+		$("#create-transactionStage").change(function () {
+			//alert(1);
+			var stage = $("#create-transactionStage").val();
+			var propertiy = json[stage];
+			$("#create-possibility").val(propertiy);
+		});
+
 
 	})
 </script>
