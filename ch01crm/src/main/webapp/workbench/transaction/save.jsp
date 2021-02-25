@@ -135,7 +135,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				<select class="form-control" id="create-transactionOwner">
 					<option></option>
 					<c:forEach var="c" items="${uList}">
-						<option value="${c.id}">${c.name}</option>
+						<option value="${c.id}" ${user.id eq c.id ? "selected" : ""}>${c.name}</option>
 					</c:forEach>
 				  <%--<option>zhangsan</option>
 				  <option>lisi</option>
@@ -168,7 +168,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<div class="col-sm-10" style="width: 300px;">
 			  <select class="form-control" id="create-transactionStage">
 			  	<option></option>
-			  	<option>资质审查</option>
+				  <c:forEach items="${stageList}" var="a">
+					  <option value="${a.value}">${a.text}</option>
+				  </c:forEach>
+			  	<%--<option>资质审查</option>
 			  	<option>需求分析</option>
 			  	<option>价值建议</option>
 			  	<option>确定决策者</option>
@@ -176,7 +179,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			  	<option>谈判/复审</option>
 			  	<option>成交</option>
 			  	<option>丢失的线索</option>
-			  	<option>因竞争丢失关闭</option>
+			  	<option>因竞争丢失关闭</option>--%>
 			  </select>
 			</div>
 		</div>
@@ -186,8 +189,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<div class="col-sm-10" style="width: 300px;">
 				<select class="form-control" id="create-transactionType">
 				  <option></option>
-				  <option>已有业务</option>
-				  <option>新业务</option>
+					<c:forEach items="${transactionTypeList}" var="a">
+						<option value="${a.value}">${a.text}</option>
+					</c:forEach>
+				  <%--<option>已有业务</option>--%>
+				  <%--<option>新业务</option>--%>
 				</select>
 			</div>
 			<label for="create-possibility" class="col-sm-2 control-label">可能性</label>
@@ -201,7 +207,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<div class="col-sm-10" style="width: 300px;">
 				<select class="form-control" id="create-clueSource">
 				  <option></option>
-				  <option>广告</option>
+					<c:forEach items="${sourceList}" var="a">
+						<option value="${a.value}">${a.text}</option>
+					</c:forEach>
+				  <%--<option>广告</option>
 				  <option>推销电话</option>
 				  <option>员工介绍</option>
 				  <option>外部介绍</option>
@@ -214,7 +223,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				  <option>交易会</option>
 				  <option>web下载</option>
 				  <option>web调研</option>
-				  <option>聊天</option>
+				  <option>聊天</option>--%>
 				</select>
 			</div>
 			<label for="create-activitySrc" class="col-sm-2 control-label">市场活动源&nbsp;&nbsp;<a href="javascript:void(0);" data-toggle="modal" data-target="#findMarketActivity"><span class="glyphicon glyphicon-search"></span></a></label>
