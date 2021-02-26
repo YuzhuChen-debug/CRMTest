@@ -88,6 +88,8 @@
     <servlet-name>TransactionController</servlet-name>
     <url-pattern>/workbench/transaction/create.do</url-pattern>
     <url-pattern>/workbench/transaction/getCustomerName.do</url-pattern>
+    <url-pattern>/workbench/transaction/getActivityList.do</url-pattern>
+    <url-pattern>/workbench/transaction/getContactsList.do</url-pattern>
   </servlet-mapping>
 </web-app>
 

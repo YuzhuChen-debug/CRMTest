@@ -63,7 +63,105 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			$("#create-possibility").val(propertiy);
 		});
 
+		$("#searchText").keydown(function (event) {
+			if(event.keyCode==13){
+				$.ajax({
+					url:"workbench/transaction/getActivityList.do",
+					data:{
+						"name":$.trim($("#searchText").val())
+					},
+					dataType:"json",
+					type:"get",
+					success:function (data) {
+						//处理返回的数据
+						/*
+						* 	data:{success:true,aList:[{a1},{a2},{a3}]}
+						* or data:{success:false,msg:msg}
+						* */
+						if(data.success){
+							var html="";
+							$.each(data.aList,function (i,n) {
+								html+= '<tr>';
+								html+= '	<td><input type="radio" name="activity" value="'+n.id+'"/></td>';
+								html+= '	<td id="t'+n.id+'">'+n.name+'</td>';
+								html+= '	<td>'+n.startDate+'</td>';
+								html+= '	<td>'+n.endDate+'</td>';
+								html+= '	<td>'+n.owner+'</td>';
+								html+= '</tr>';
+								$("#activityBody").html(html);
+							})
 
+						}else{
+							alert(data.msg);
+						}
+
+
+					}
+				})
+				//alert(111);
+				return false;
+			}
+		})
+		$("#searchModalBtn").click(function () {
+			var id = $("input[name=activity]:checked").val();
+			var name = $("#t"+id).html();
+			//alert(id);
+			//alert(name);
+			$("#create-activitySrc").val(name);
+			$("#create-activityId").val(id);
+			$("#findMarketActivity").modal("hide");
+		})
+
+		$("#searchContactsText").keydown(function (event) {
+			if(event.keyCode==13){
+				//alert(1);
+				$.ajax({
+					url:"workbench/transaction/getContactsList.do",
+					data:{
+						"name":$.trim($("#searchContactsText").val())
+					},
+					dataType:"json",
+					type:"get",
+					success:function (data) {
+						//处理返回的数据
+						/*
+						* 	data:{success:true,coList:[{a1},{a2},{a3}]}
+						* or data:{success:false,msg:msg}
+						* */
+						if(data.success){
+							var html="";
+							$.each(data.coList,function (i,n) {
+								html+= '<tr>';
+								html+= '	<td><input type="radio" name="activity" value="'+n.id+'"/></td>';
+								html+= '	<td id="f'+n.id+'">'+n.fullname+'</td>';
+								html+= '	<td>'+n.email+'</td>';
+								html+= '	<td>'+n.mphone+'</td>';
+								html+= '</tr>';
+
+								$("#searchContactsBody").html(html);
+							})
+
+						}else{
+							alert(data.msg);
+						}
+
+
+					}
+				})
+				//alert(111);
+				return false;
+			}
+		})
+
+		$("#searchContactsModalBtn").click(function () {
+			var id = $("input[name=activity]:checked").val();
+			var name = $("#f"+id).html();
+			//alert(id);
+			//alert(name);
+			$("#create-contactsName").val(name);
+			$("#create-contactsId").val(id);
+			$("#findContacts").modal("hide");
+		})
 	})
 </script>
 
@@ -81,7 +179,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<div class="btn-group" style="position: relative; top: 18%; left: 8px;">
 						<form class="form-inline" role="form">
 						  <div class="form-group has-feedback">
-						    <input type="text" class="form-control" style="width: 300px;" placeholder="请输入市场活动名称，支持模糊查询">
+						    <input type="text" class="form-control" style="width: 300px;"  id="searchText" placeholder="请输入市场活动名称，支持模糊查询">
 						    <span class="glyphicon glyphicon-search form-control-feedback"></span>
 						  </div>
 						</form>
@@ -96,8 +194,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<td>所有者</td>
 							</tr>
 						</thead>
-						<tbody>
-							<tr>
+						<tbody id="activityBody">
+							<%--<tr>
 								<td><input type="radio" name="activity"/></td>
 								<td>发传单</td>
 								<td>2020-10-10</td>
@@ -110,9 +208,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<td>2020-10-10</td>
 								<td>2020-10-20</td>
 								<td>zhangsan</td>
-							</tr>
+							</tr>--%>
 						</tbody>
 					</table>
+					<button type="button" class="btn btn-primary" id="searchModalBtn">提交</button>
+					<button type="button" class="btn btn-default">取消</button>
 				</div>
 			</div>
 		</div>
@@ -132,7 +232,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 					<div class="btn-group" style="position: relative; top: 18%; left: 8px;">
 						<form class="form-inline" role="form">
 						  <div class="form-group has-feedback">
-						    <input type="text" class="form-control" style="width: 300px;" placeholder="请输入联系人名称，支持模糊查询">
+						    <input type="text" class="form-control" id="searchContactsText" style="width: 300px;" placeholder="请输入联系人名称，支持模糊查询">
 						    <span class="glyphicon glyphicon-search form-control-feedback"></span>
 						  </div>
 						</form>
@@ -146,8 +246,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<td>手机</td>
 							</tr>
 						</thead>
-						<tbody>
-							<tr>
+						<tbody id="searchContactsBody">
+							<%--<tr>
 								<td><input type="radio" name="activity"/></td>
 								<td>李四</td>
 								<td>lisi@bjpowernode.com</td>
@@ -158,9 +258,11 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 								<td>李四</td>
 								<td>lisi@bjpowernode.com</td>
 								<td>12345678901</td>
-							</tr>
+							</tr>--%>
 						</tbody>
 					</table>
+					<button type="button" class="btn btn-primary" id="searchContactsModalBtn">提交</button>
+					<button type="button" class="btn btn-default">取消</button>
 				</div>
 			</div>
 		</div>
@@ -273,9 +375,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				  <option>聊天</option>--%>
 				</select>
 			</div>
-			<label for="create-activitySrc" class="col-sm-2 control-label">市场活动源&nbsp;&nbsp;<a href="javascript:void(0);" data-toggle="modal" data-target="#findMarketActivity"><span class="glyphicon glyphicon-search"></span></a></label>
+			<label for="create-activitySrc" class="col-sm-2 control-label">市场活动源&nbsp;&nbsp;<a href="javascript:void(0);" data-toggle="modal" data-target="#findMarketActivity"><span class="glyphicon glyphicon-search" ></span></a></label>
 			<div class="col-sm-10" style="width: 300px;">
 				<input type="text" class="form-control" id="create-activitySrc">
+				<input type="hidden" id="create-activityId"/>
 			</div>
 		</div>
 		
@@ -283,6 +386,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<label for="create-contactsName" class="col-sm-2 control-label">联系人名称&nbsp;&nbsp;<a href="javascript:void(0);" data-toggle="modal" data-target="#findContacts"><span class="glyphicon glyphicon-search"></span></a></label>
 			<div class="col-sm-10" style="width: 300px;">
 				<input type="text" class="form-control" id="create-contactsName">
+				<input type="hidden" id="create-contactsId"/>
 			</div>
 		</div>
 		

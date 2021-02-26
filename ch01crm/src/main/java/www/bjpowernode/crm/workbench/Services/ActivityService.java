@@ -35,4 +35,6 @@ public interface ActivityService {
     boolean updateNodeContent(ActivityRemark ar) throws ActivityRemarkDetailErrorException;
 
     List<Activity> showActivityList(String name) throws ActivityDetialErrorException;
+
+    List<Activity> getActivityList(String name) throws ActivityDetialErrorException;
 }
