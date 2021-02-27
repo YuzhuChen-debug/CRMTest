@@ -12,4 +12,5 @@ public interface CustomerDao {
     int addNewCustomer(Customer customer);
 
     List<String> getCustomerName(String name);
+
 }

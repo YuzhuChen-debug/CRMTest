@@ -1,21 +1,23 @@
 package www.bjpowernode.crm.workbench.web.controller;
 
+import www.bjpowernode.crm.Exceptions.SaveActivityErrorException;
 import www.bjpowernode.crm.Exceptions.UserListErrorException;
+import www.bjpowernode.crm.Utils.DateTimeUtil;
 import www.bjpowernode.crm.Utils.PrintJson;
 import www.bjpowernode.crm.Utils.ServiceFactory;
+import www.bjpowernode.crm.Utils.UUIDUtil;
 import www.bjpowernode.crm.settings.Services.UserService;
 import www.bjpowernode.crm.settings.Services.imp.UserServiceImpl;
 import www.bjpowernode.crm.settings.domain.User;
 import www.bjpowernode.crm.workbench.Services.ActivityService;
 import www.bjpowernode.crm.workbench.Services.ContactsService;
-import www.bjpowernode.crm.workbench.Services.CustomerService;
 import www.bjpowernode.crm.workbench.Services.Imp.ActivityServiceImp;
 import www.bjpowernode.crm.workbench.Services.Imp.ContactsServiceImpl;
-import www.bjpowernode.crm.workbench.Services.Imp.CustomerServiceImp;
 import www.bjpowernode.crm.workbench.Services.Imp.TranServiceImpl;
 import www.bjpowernode.crm.workbench.Services.TranService;
 import www.bjpowernode.crm.workbench.domain.Activity;
 import www.bjpowernode.crm.workbench.domain.Contacts;
+import www.bjpowernode.crm.workbench.domain.Tran;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -39,7 +41,58 @@ public class TransactionController extends HttpServlet {
             getActivityList(request,response);
         }else if("/workbench/transaction/getContactsList.do".equals(path)){
             getContactsList(request,response);
+        }else if("/workbench/transaction/save.do".equals(path)){
+            save(request,response);
         }
+    }
+
+    private void save(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("执行添加交易操作");
+        String id= UUIDUtil.getUUID();
+        String owner=request.getParameter("save-owner");
+        String money=request.getParameter("save-money");
+        String name=request.getParameter("save-name");
+        String expectedDate=request.getParameter("save-expectedDate");
+        String customerName=request.getParameter("save-customerName");
+        String stage=request.getParameter("save-stage");
+        String type=request.getParameter("save-type");
+        String source=request.getParameter("save-source");
+        String activityId=request.getParameter("save-activityId");
+        String contactsId=request.getParameter("save-contactsId");
+        String createBy=((User)request.getSession().getAttribute("user")).getName();
+        String createTime= DateTimeUtil.getSysTime();
+        String description=request.getParameter("save-description");
+        String contactSummary=request.getParameter("save-contactSummary");
+        String nextContactTime=request.getParameter("save-nextContactTime");
+        Tran t = new Tran();
+        t.setId(id);
+        t.setOwner(owner);
+        t.setMoney(money);
+        t.setExpectedDate(expectedDate);
+        t.setStage(stage);
+        t.setType(type);
+        t.setSource(source);
+        t.setName(name);
+        t.setActivityId(activityId);
+        t.setContactsId(contactsId);
+        t.setCreateBy(createBy);
+        t.setCreateTime(createTime);
+        t.setDescription(description);
+        t.setContactSummary(contactSummary);
+        t.setNextContactTime(nextContactTime);
+        TranService ts = (TranService) ServiceFactory.getService(new TranServiceImpl());
+        try {
+            boolean success = ts.save(t,customerName);
+            response.sendRedirect(request.getContextPath()+"/workbench/transaction/index.jsp");
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SaveActivityErrorException e) {
+            e.printStackTrace();
+
+            //这里怎么把一场信息给save.jsp呢,并且在save.jsp当中alert()出来;
+        }
+
+
     }
 
     private void getContactsList(HttpServletRequest request, HttpServletResponse response) {

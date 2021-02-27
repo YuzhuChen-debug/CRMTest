@@ -41,6 +41,25 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 
 	$(function () {
+
+		pageList();
+		$(".time1").datetimepicker({
+			minView: "month",
+			language:  'zh-CN',
+			format: 'yyyy-mm-dd',
+			autoclose: true,
+			todayBtn: true,
+			pickerPosition: "bottom-left"
+		});
+		$(".time2").datetimepicker({
+			minView: "month",
+			language:  'zh-CN',
+			format: 'yyyy-mm-dd',
+			autoclose: true,
+			todayBtn: true,
+			pickerPosition: "top-left"
+		});
+
 		$("#create-customerName").typeahead({
 			source: function (query, process) {
 				$.get(
@@ -162,6 +181,19 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			$("#create-contactsId").val(id);
 			$("#findContacts").modal("hide");
 		})
+
+		$("#saveBtn").click(function () {
+			var customerName=$.trim($("#create-customerName").val());
+			if(customerName==null ||customerName==""){
+				alert("客户名称不能为空");
+			}else{
+				$("#saveForm").submit();
+			}
+
+		})
+		$("#cansalBtn").click(function () {
+			window.location.href="workbench/transaction/index.jsp";
+		})
 	})
 </script>
 
@@ -272,16 +304,16 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	<div style="position:  relative; left: 30px;">
 		<h3>创建交易</h3>
 	  	<div style="position: relative; top: -40px; left: 70%;">
-			<button type="button" class="btn btn-primary">保存</button>
-			<button type="button" class="btn btn-default">取消</button>
+			<button type="button" class="btn btn-primary" id="saveBtn">保存</button>
+			<button type="button" class="btn btn-default" id="cansalBtn">取消</button>
 		</div>
 		<hr style="position: relative; top: -40px;">
 	</div>
-	<form class="form-horizontal" role="form" style="position: relative; top: -30px;">
+	<form class="form-horizontal" role="form" style="position: relative; top: -30px;" id="saveForm" action="workbench/transaction/save.do" method="post">
 		<div class="form-group">
 			<label for="create-transactionOwner" class="col-sm-2 control-label">所有者<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
-				<select class="form-control" id="create-transactionOwner">
+				<select class="form-control" id="create-transactionOwner" name="save-owner">
 					<option></option>
 					<c:forEach var="c" items="${uList}">
 						<option value="${c.id}" ${user.id eq c.id ? "selected" : ""}>${c.name}</option>
@@ -293,29 +325,29 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			</div>
 			<label for="create-amountOfMoney" class="col-sm-2 control-label">金额</label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-amountOfMoney">
+				<input type="text" class="form-control" id="create-amountOfMoney" name="save-money">
 			</div>
 		</div>
 		
 		<div class="form-group">
 			<label for="create-transactionName" class="col-sm-2 control-label">名称<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-transactionName">
+				<input type="text" class="form-control" id="create-transactionName" name="save-name">
 			</div>
 			<label for="create-expectedClosingDate" class="col-sm-2 control-label">预计成交日期<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-expectedClosingDate">
+				<input type="text" class="form-control time1" readonly id="create-expectedClosingDate" name="save-expectedDate">
 			</div>
 		</div>
 		
 		<div class="form-group">
 			<label for="create-accountName" class="col-sm-2 control-label">客户名称<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-customerName" placeholder="支持自动补全，输入客户不存在则新建">
+				<input type="text" class="form-control" id="create-customerName" placeholder="支持自动补全，输入客户不存在则新建" name="save-customerName">
 			</div>
 			<label for="create-transactionStage" class="col-sm-2 control-label">阶段<span style="font-size: 15px; color: red;">*</span></label>
 			<div class="col-sm-10" style="width: 300px;">
-			  <select class="form-control" id="create-transactionStage">
+			  <select class="form-control" id="create-transactionStage" name="save-stage">
 			  	<option></option>
 				  <c:forEach items="${stageList}" var="a">
 					  <option value="${a.value}">${a.text}</option>
@@ -336,7 +368,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		<div class="form-group">
 			<label for="create-transactionType" class="col-sm-2 control-label">类型</label>
 			<div class="col-sm-10" style="width: 300px;">
-				<select class="form-control" id="create-transactionType">
+				<select class="form-control" id="create-transactionType" save-type>
 				  <option></option>
 					<c:forEach items="${transactionTypeList}" var="a">
 						<option value="${a.value}">${a.text}</option>
@@ -347,14 +379,14 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			</div>
 			<label for="create-possibility" class="col-sm-2 control-label">可能性</label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-possibility">
+				<input type="text" class="form-control" id="create-possibility" >
 			</div>
 		</div>
 		
 		<div class="form-group">
 			<label for="create-clueSource" class="col-sm-2 control-label">来源</label>
 			<div class="col-sm-10" style="width: 300px;">
-				<select class="form-control" id="create-clueSource">
+				<select class="form-control" id="create-clueSource" name="save-source">
 				  <option></option>
 					<c:forEach items="${sourceList}" var="a">
 						<option value="${a.value}">${a.text}</option>
@@ -378,7 +410,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<label for="create-activitySrc" class="col-sm-2 control-label">市场活动源&nbsp;&nbsp;<a href="javascript:void(0);" data-toggle="modal" data-target="#findMarketActivity"><span class="glyphicon glyphicon-search" ></span></a></label>
 			<div class="col-sm-10" style="width: 300px;">
 				<input type="text" class="form-control" id="create-activitySrc">
-				<input type="hidden" id="create-activityId"/>
+				<input type="hidden" id="create-activityId" name="save-activityId"/>
 			</div>
 		</div>
 		
@@ -386,28 +418,28 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<label for="create-contactsName" class="col-sm-2 control-label">联系人名称&nbsp;&nbsp;<a href="javascript:void(0);" data-toggle="modal" data-target="#findContacts"><span class="glyphicon glyphicon-search"></span></a></label>
 			<div class="col-sm-10" style="width: 300px;">
 				<input type="text" class="form-control" id="create-contactsName">
-				<input type="hidden" id="create-contactsId"/>
+				<input type="hidden" id="create-contactsId" name="save-contactsId"/>
 			</div>
 		</div>
 		
 		<div class="form-group">
 			<label for="create-describe" class="col-sm-2 control-label">描述</label>
 			<div class="col-sm-10" style="width: 70%;">
-				<textarea class="form-control" rows="3" id="create-describe"></textarea>
+				<textarea class="form-control" rows="3" id="create-describe" name="save-description"></textarea>
 			</div>
 		</div>
 		
 		<div class="form-group">
 			<label for="create-contactSummary" class="col-sm-2 control-label">联系纪要</label>
 			<div class="col-sm-10" style="width: 70%;">
-				<textarea class="form-control" rows="3" id="create-contactSummary"></textarea>
+				<textarea class="form-control" rows="3" id="create-contactSummary" name="save-contactSummary"></textarea>
 			</div>
 		</div>
 		
 		<div class="form-group">
 			<label for="create-nextContactTime" class="col-sm-2 control-label">下次联系时间</label>
 			<div class="col-sm-10" style="width: 300px;">
-				<input type="text" class="form-control" id="create-nextContactTime">
+				<input type="text" class="form-control time2" readonly id="create-nextContactTime" name="save-nextContactTime">
 			</div>
 		</div>
 		
