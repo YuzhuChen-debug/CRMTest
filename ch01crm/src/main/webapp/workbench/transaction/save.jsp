@@ -42,7 +42,6 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 	$(function () {
 
-		pageList();
 		$(".time1").datetimepicker({
 			minView: "month",
 			language:  'zh-CN',
@@ -195,6 +194,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			window.location.href="workbench/transaction/index.jsp";
 		})
 	})
+
 </script>
 
 	<!-- 查找市场活动 -->	
