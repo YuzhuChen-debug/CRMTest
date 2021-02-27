@@ -4,6 +4,7 @@ import www.bjpowernode.crm.Exceptions.SaveActivityErrorException;
 import www.bjpowernode.crm.Utils.DateTimeUtil;
 import www.bjpowernode.crm.Utils.SqlSessionUtil;
 import www.bjpowernode.crm.Utils.UUIDUtil;
+import www.bjpowernode.crm.VO.CountAndActivityVO;
 import www.bjpowernode.crm.workbench.Services.TranService;
 import www.bjpowernode.crm.workbench.dao.CustomerDao;
 import www.bjpowernode.crm.workbench.dao.TranDao;
@@ -65,5 +66,13 @@ public class TranServiceImpl implements TranService {
         }
 
         return success;
+    }
+
+    @Override
+    public CountAndActivityVO<Tran> getPageList(int pageCount,int pageSize) {
+        CountAndActivityVO<Tran> caav = new CountAndActivityVO<>();
+        List<Tran> aList =tranDao.getPageList(pageCount,pageSize);
+        int count = tranDao.getCount();
+        return null;
     }
 }

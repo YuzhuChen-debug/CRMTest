@@ -6,6 +6,7 @@ import www.bjpowernode.crm.Utils.DateTimeUtil;
 import www.bjpowernode.crm.Utils.PrintJson;
 import www.bjpowernode.crm.Utils.ServiceFactory;
 import www.bjpowernode.crm.Utils.UUIDUtil;
+import www.bjpowernode.crm.VO.CountAndActivityVO;
 import www.bjpowernode.crm.settings.Services.UserService;
 import www.bjpowernode.crm.settings.Services.imp.UserServiceImpl;
 import www.bjpowernode.crm.settings.domain.User;
@@ -55,7 +56,23 @@ public class TransactionController extends HttpServlet {
         String pageSizeStr = request.getParameter("pageSize");
         int pageSize = Integer.parseInt(pageSizeStr);
         int pageCount = (pageNo-1)*pageSize;
-
+        TranService ts = (TranService) ServiceFactory.getService(new TranServiceImpl());
+        try{
+            CountAndActivityVO<Tran> caav = ts.getPageList(pageCount,pageSize);
+            Map<String,Object> map1 = new HashMap<>();
+            //System.out.println(coList);
+            map1.put("success",true);
+            map1.put("caav",caav);
+            PrintJson.printJsonObj(response,map1);
+        }catch(Exception e){
+            e.printStackTrace();
+            String msg = e.getMessage();
+            System.out.println(msg);
+            Map<String,Object> map = new HashMap<>();
+            map.put("success",false);
+            map.put("msg",msg);
+            PrintJson.printJsonObj(response,map);
+        }
 
     }
 

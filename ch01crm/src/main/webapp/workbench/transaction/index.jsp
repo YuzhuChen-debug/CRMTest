@@ -31,12 +31,12 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			success:function (data) {
 				//处理返回的数据
 				/*
-				* 	data:{success:true,CAAV:{total:pageCount,aList:[{t1},{t2},{t3}]}}
+				* 	data:{success:true,caav:{total:pageCount,aList:[{t1},{t2},{t3}]}}
 				* or data:{success:false,msg:msg}
 				* */
 				if(data.success){
 					var html = "";
-					$.each(data.CAAV.aList,function (i,n) {
+					$.each(data.caav.aList,function (i,n) {
 						html += '<tr>';
 						html += '	<td><input type="checkbox" name="xz" /></td>';
 						html += '			<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/transaction/detail.do?id='+n.id+'\';">'+n.name+'</a></td>';
