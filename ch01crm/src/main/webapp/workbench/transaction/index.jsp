@@ -20,9 +20,42 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 
 	$(function(){
 		//查询交易信息列表
-		
+		pageList(1,2);
 		
 	});
+	function pageList(pageNo,pageSize) {
+		$.ajax({
+			url:"workbench/transaction/pageList.do",
+			dataType:"json",
+			type:"get",
+			success:function (data) {
+				//处理返回的数据
+				/*
+				* 	data:{success:true,CAAV:{total:pageCount,aList:[{t1},{t2},{t3}]}}
+				* or data:{success:false,msg:msg}
+				* */
+				if(data.success){
+					var html = "";
+					$.each(data.CAAV.aList,function (i,n) {
+						html += '<tr>';
+						html += '	<td><input type="checkbox" name="xz" /></td>';
+						html += '			<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href=\'workbench/transaction/detail.do?id='+n.id+'\';">'+n.name+'</a></td>';
+						html += '	<td>'+n.customerId+'</td>';
+						html += '	<td>'+n.stage+'</td>';
+						html += '	<td>'+n.type+'</td>';
+						html += '	<td>'+n.owner+'</td>';
+						html += '	<td>'+n.source+'</td>';
+						html += '	<td>'+n.contactsId+'</td>';
+						html += '</tr>';
+					})
+					$("#TranBody").html(html);
+
+				}else{
+					alert(data.msg);
+				}
+			}
+		})
+	}
 	
 </script>
 </head>
@@ -154,8 +187,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<td>联系人名称</td>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
+					<tbody id="TranBody">
+						<%--<tr>
 							<td><input type="checkbox" /></td>
 							<td><a style="text-decoration: none; cursor: pointer;" onclick="window.location.href='workbench/transaction/detail.jsp';">动力节点-交易01</a></td>
 							<td>动力节点</td>
@@ -174,7 +207,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
                             <td>zhangsan</td>
                             <td>广告</td>
                             <td>李四</td>
-                        </tr>
+                        </tr>--%>
 					</tbody>
 				</table>
 			</div>

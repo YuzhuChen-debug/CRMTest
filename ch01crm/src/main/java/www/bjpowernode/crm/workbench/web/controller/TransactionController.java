@@ -43,7 +43,20 @@ public class TransactionController extends HttpServlet {
             getContactsList(request,response);
         }else if("/workbench/transaction/save.do".equals(path)){
             save(request,response);
+        }else if("/workbench/transaction/pageList.do".equals(path)){
+            pageList(request,response);
         }
+    }
+
+    private void pageList(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("执行查询交易列表操作");
+        String pageNoStr= request.getParameter("pageNo");
+        int pageNo = Integer.parseInt(pageNoStr);
+        String pageSizeStr = request.getParameter("pageSize");
+        int pageSize = Integer.parseInt(pageSizeStr);
+        int pageCount = (pageNo-1)*pageSize;
+
+
     }
 
     private void save(HttpServletRequest request, HttpServletResponse response) {
