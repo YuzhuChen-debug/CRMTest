@@ -56,9 +56,24 @@ public class TransactionController extends HttpServlet {
         String pageSizeStr = request.getParameter("pageSize");
         int pageSize = Integer.parseInt(pageSizeStr);
         int pageCount = (pageNo-1)*pageSize;
+        String owner = request.getParameter("owner");
+        String name = request.getParameter("name");
+        String stage = request.getParameter("stage");
+        String type = request.getParameter("type");
+        String source = request.getParameter("source");
+        String customerId = request.getParameter("customerName");
+        String contactsId = request.getParameter("contactsName");
         TranService ts = (TranService) ServiceFactory.getService(new TranServiceImpl());
+        Tran t = new Tran();
+        t.setOwner(owner);
+        t.setName(name);
+        t.setStage(stage);
+        t.setType(type);
+        t.setSource(source);
+        t.setCustomerId(customerId);
+        t.setContactsId(contactsId);
         try{
-            CountAndActivityVO<Tran> caav = ts.getPageList(pageCount,pageSize);
+            CountAndActivityVO<Tran> caav = ts.getPageList(pageCount,pageSize,t);
             Map<String,Object> map1 = new HashMap<>();
             //System.out.println(coList);
             map1.put("success",true);

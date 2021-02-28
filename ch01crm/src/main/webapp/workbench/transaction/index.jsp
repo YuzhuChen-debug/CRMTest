@@ -26,6 +26,17 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	function pageList(pageNo,pageSize) {
 		$.ajax({
 			url:"workbench/transaction/pageList.do",
+			data:{
+				"pageNo":pageNo,
+				"pageSize":pageSize,
+				"owner":$.trim($("#search-owner").val()),
+				"name":$.trim($("#search-name").val()),
+				"stage":$.trim($("#search-stage").val()),
+				"type":$.trim($("#search-type").val()),
+				"source":$.trim($("#search-source").val()),
+				"customerName":$.trim($("#search-customerName").val()),
+				"contactsName":$.trim($("#search-contactsName").val())
+			},
 			dataType:"json",
 			type:"get",
 			success:function (data) {
@@ -81,21 +92,21 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">所有者</div>
-				      <input class="form-control" type="text">
+				      <input class="form-control" type="text" id="search-owner">
 				    </div>
 				  </div>
 				  
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">名称</div>
-				      <input class="form-control" type="text">
+				      <input class="form-control" type="text" id="search-name">
 				    </div>
 				  </div>
 				  
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">客户名称</div>
-				      <input class="form-control" type="text">
+				      <input class="form-control" type="text" id="search-customerName">
 				    </div>
 				  </div>
 				  
@@ -104,7 +115,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">阶段</div>
-					  <select class="form-control">
+					  <select class="form-control" id="search-stage">
 					  	<option></option>
 					  	<option>资质审查</option>
 					  	<option>需求分析</option>
@@ -122,7 +133,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">类型</div>
-					  <select class="form-control">
+					  <select class="form-control" id="search-type">
 					  	<option></option>
 					  	<option>已有业务</option>
 					  	<option>新业务</option>
@@ -133,7 +144,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">来源</div>
-				      <select class="form-control" id="create-clueSource">
+				      <select class="form-control" id="search-source">
 						  <option></option>
 						  <option>广告</option>
 						  <option>推销电话</option>
@@ -156,7 +167,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 				  <div class="form-group">
 				    <div class="input-group">
 				      <div class="input-group-addon">联系人名称</div>
-				      <input class="form-control" type="text">
+				      <input class="form-control" type="text" id="search-contactsName">
 				    </div>
 				  </div>
 				  

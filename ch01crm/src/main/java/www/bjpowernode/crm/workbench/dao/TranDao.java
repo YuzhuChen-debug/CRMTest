@@ -8,4 +8,8 @@ public interface TranDao {
 
     int addTran(Tran t);
 
+    List<Tran> getPageList(int pageCount, int pageSize, Tran t);
+
+
+    int getCount(int pageCount, int pageSize, Tran t);
 }

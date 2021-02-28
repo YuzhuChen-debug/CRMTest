@@ -12,5 +12,5 @@ public interface TranService  {
 
     boolean save(Tran t, String customerName) throws SaveActivityErrorException;
 
-    CountAndActivityVO<Tran> getPageList(int pageCount,int pageSize);
+    CountAndActivityVO<Tran> getPageList(int pageCount,int pageSize,Tran t);
 }

@@ -69,10 +69,10 @@ public class TranServiceImpl implements TranService {
     }
 
     @Override
-    public CountAndActivityVO<Tran> getPageList(int pageCount,int pageSize) {
+    public CountAndActivityVO<Tran> getPageList(int pageCount, int pageSize,Tran t ) {
         CountAndActivityVO<Tran> caav = new CountAndActivityVO<>();
-        List<Tran> aList =tranDao.getPageList(pageCount,pageSize);
-        int count = tranDao.getCount();
+        List<Tran> aList =tranDao.getPageList(pageCount,pageSize,t);
+        int count = tranDao.getCount(pageCount,pageSize,t);
         return null;
     }
 }
