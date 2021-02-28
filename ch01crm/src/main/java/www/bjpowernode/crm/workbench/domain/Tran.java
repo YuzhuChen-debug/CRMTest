@@ -20,6 +20,17 @@ public class Tran {
 	private String description;
 	private String contactSummary;	//联系纪要
 	private String nextContactTime;	//下次联系时间
+
+	public String getProperity() {
+		return properity;
+	}
+
+	public void setProperity(String properity) {
+		this.properity = properity;
+	}
+
+	//在交易功能模块会用到这个属性；
+	private String properity;
 	
 	public String getId() {
 		return id;

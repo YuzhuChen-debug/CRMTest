@@ -21,6 +21,7 @@ import www.bjpowernode.crm.workbench.domain.Activity;
 import www.bjpowernode.crm.workbench.domain.Contacts;
 import www.bjpowernode.crm.workbench.domain.Tran;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +30,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class TransactionController extends HttpServlet {
     @Override
@@ -58,6 +60,10 @@ public class TransactionController extends HttpServlet {
         TranService ts = (TranService) ServiceFactory.getService(new TranServiceImpl());
         try {
             Tran t = ts.detail(id);
+            String stage = t.getStage();
+            Map<String,String> pmap = (Map<String, String>) this.getServletContext().getAttribute("pmap");
+            String properity = pmap.get(stage);
+            t.setProperity(properity);
             request.setAttribute("t",t);
             request.getRequestDispatcher("/workbench/transaction/detail.jsp").forward(request,response);
         } catch (ServletException e) {
