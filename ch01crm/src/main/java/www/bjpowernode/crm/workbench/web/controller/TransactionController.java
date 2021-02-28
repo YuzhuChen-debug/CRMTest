@@ -1,5 +1,6 @@
 package www.bjpowernode.crm.workbench.web.controller;
 
+import www.bjpowernode.crm.Exceptions.ActivityDetialErrorException;
 import www.bjpowernode.crm.Exceptions.SaveActivityErrorException;
 import www.bjpowernode.crm.Exceptions.UserListErrorException;
 import www.bjpowernode.crm.Utils.DateTimeUtil;
@@ -46,6 +47,25 @@ public class TransactionController extends HttpServlet {
             save(request,response);
         }else if("/workbench/transaction/pageList.do".equals(path)){
             pageList(request,response);
+        }else if("/workbench/transaction/detail.do".equals(path)){
+            detail(request,response);
+        }
+    }
+
+    private void detail(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("跳转到详细信息页");
+        String id = request.getParameter("id");
+        TranService ts = (TranService) ServiceFactory.getService(new TranServiceImpl());
+        try {
+            Tran t = ts.detail(id);
+            request.setAttribute("t",t);
+            request.getRequestDispatcher("/workbench/transaction/detail.jsp").forward(request,response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ActivityDetialErrorException e) {
+            e.printStackTrace();
         }
     }
 
@@ -64,16 +84,18 @@ public class TransactionController extends HttpServlet {
         String customerId = request.getParameter("customerName");
         String contactsId = request.getParameter("contactsName");
         TranService ts = (TranService) ServiceFactory.getService(new TranServiceImpl());
-        Tran t = new Tran();
-        t.setOwner(owner);
-        t.setName(name);
-        t.setStage(stage);
-        t.setType(type);
-        t.setSource(source);
-        t.setCustomerId(customerId);
-        t.setContactsId(contactsId);
+        Map<String,Object> map = new HashMap<>();
+        map.put("owner",owner);
+        map.put("name",name);
+        map.put("stage",stage);
+        map.put("type",type);
+        map.put("source",source);
+        map.put("customerId",customerId);
+        map.put("contactsId",contactsId);
+        map.put("pageCount",pageCount);
+        map.put("pageSize",pageSize);
         try{
-            CountAndActivityVO<Tran> caav = ts.getPageList(pageCount,pageSize,t);
+            CountAndActivityVO<Tran> caav = ts.getPageList(map);
             Map<String,Object> map1 = new HashMap<>();
             //System.out.println(coList);
             map1.put("success",true);
@@ -83,10 +105,10 @@ public class TransactionController extends HttpServlet {
             e.printStackTrace();
             String msg = e.getMessage();
             System.out.println(msg);
-            Map<String,Object> map = new HashMap<>();
-            map.put("success",false);
-            map.put("msg",msg);
-            PrintJson.printJsonObj(response,map);
+            Map<String,Object> map2 = new HashMap<>();
+            map2.put("success",false);
+            map2.put("msg",msg);
+            PrintJson.printJsonObj(response,map2);
         }
 
     }

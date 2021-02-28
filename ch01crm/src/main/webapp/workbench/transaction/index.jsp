@@ -42,9 +42,10 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			success:function (data) {
 				//处理返回的数据
 				/*
-				* 	data:{success:true,caav:{total:pageCount,aList:[{t1},{t2},{t3}]}}
+				* 	data:{success:true,caav:{count:pageCount,aList:[{t1},{t2},{t3}]}}
 				* or data:{success:false,msg:msg}
 				* */
+				//alert(data.caav);
 				if(data.success){
 					var html = "";
 					$.each(data.caav.aList,function (i,n) {

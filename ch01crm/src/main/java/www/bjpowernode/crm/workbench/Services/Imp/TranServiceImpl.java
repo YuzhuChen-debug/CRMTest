@@ -1,5 +1,6 @@
 package www.bjpowernode.crm.workbench.Services.Imp;
 
+import www.bjpowernode.crm.Exceptions.ActivityDetialErrorException;
 import www.bjpowernode.crm.Exceptions.SaveActivityErrorException;
 import www.bjpowernode.crm.Utils.DateTimeUtil;
 import www.bjpowernode.crm.Utils.SqlSessionUtil;
@@ -14,6 +15,7 @@ import www.bjpowernode.crm.workbench.domain.Tran;
 import www.bjpowernode.crm.workbench.domain.TranHistory;
 
 import java.util.List;
+import java.util.Map;
 
 public class TranServiceImpl implements TranService {
     CustomerDao customerDao = SqlSessionUtil.getSqlSession().getMapper(CustomerDao.class);
@@ -69,10 +71,30 @@ public class TranServiceImpl implements TranService {
     }
 
     @Override
-    public CountAndActivityVO<Tran> getPageList(int pageCount, int pageSize,Tran t ) {
-        CountAndActivityVO<Tran> caav = new CountAndActivityVO<>();
-        List<Tran> aList =tranDao.getPageList(pageCount,pageSize,t);
-        int count = tranDao.getCount(pageCount,pageSize,t);
-        return null;
+    public CountAndActivityVO<Tran> getPageList(Map<String, Object> map) throws ActivityDetialErrorException {
+           CountAndActivityVO caav = new CountAndActivityVO();
+           List<Tran> aList = tranDao.getPageList(map);
+           if(aList==null){
+               throw new ActivityDetialErrorException("查询交易列表失败");
+           }
+           int count = tranDao.getCount(map);
+           if(count==-1){
+               throw new ActivityDetialErrorException("查询总数据条数失败");
+           }
+           caav.setaList(aList);
+           caav.setCount(count);
+           return  caav;
     }
+
+    @Override
+    public Tran detail(String id) throws ActivityDetialErrorException {
+        System.out.println("进入到查询业务层");
+        Tran t = tranDao.getDetial(id);
+        if(t==null){
+            throw new ActivityDetialErrorException("查询详细信息错误");
+        }
+        return t;
+    }
+
+
 }

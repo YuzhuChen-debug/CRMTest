@@ -3,13 +3,16 @@ package www.bjpowernode.crm.workbench.dao;
 import www.bjpowernode.crm.workbench.domain.Tran;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TranDao {
 
     int addTran(Tran t);
 
-    List<Tran> getPageList(int pageCount, int pageSize, Tran t);
+    List<Tran> getPageList(Map<String,Object> map);
 
 
-    int getCount(int pageCount, int pageSize, Tran t);
+    int getCount(Map<String,Object> map);
+
+    Tran getDetial(String id);
 }
