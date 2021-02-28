@@ -20,6 +20,7 @@ import www.bjpowernode.crm.workbench.Services.TranService;
 import www.bjpowernode.crm.workbench.domain.Activity;
 import www.bjpowernode.crm.workbench.domain.Contacts;
 import www.bjpowernode.crm.workbench.domain.Tran;
+import www.bjpowernode.crm.workbench.domain.TranHistory;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -30,7 +31,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class TransactionController extends HttpServlet {
     @Override
@@ -51,7 +51,38 @@ public class TransactionController extends HttpServlet {
             pageList(request,response);
         }else if("/workbench/transaction/detail.do".equals(path)){
             detail(request,response);
+        }else if("/workbench/transaction/showHistoryList.do".equals(path)){
+            showHistoryList(request,response);
         }
+    }
+
+    private void showHistoryList(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("执行展示历史列表操作");
+        String id = request.getParameter("id");
+        Map<String,String> pmap = (Map<String, String>) this.getServletContext().getAttribute("pmap");
+        TranService ts = (TranService) ServiceFactory.getService(new TranServiceImpl());
+        try {
+            List<TranHistory> thList = ts.showHistoryList(id);
+            for(TranHistory tranHistory:thList){
+                String stage = tranHistory.getStage();
+                String properity = pmap.get(stage);
+                tranHistory.setProperity(properity);
+            }
+            Map<String,Object> map1 = new HashMap<>();
+            //System.out.println(coList);
+            map1.put("success",true);
+            map1.put("thList",thList);
+            PrintJson.printJsonObj(response,map1);
+        } catch (Exception e) {
+            e.printStackTrace();
+            String msg = e.getMessage();
+            Map<String,Object> map2 = new HashMap<>();
+            //System.out.println(coList);
+            map2.put("success",false);
+            map2.put("msg",msg);
+            PrintJson.printJsonObj(response,map2);
+        }
+
     }
 
     private void detail(HttpServletRequest request, HttpServletResponse response) {

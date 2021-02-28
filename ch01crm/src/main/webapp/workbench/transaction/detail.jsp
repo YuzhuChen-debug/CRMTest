@@ -87,9 +87,44 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
                         }
                     }, 100);
                 });
+
+		showHistoryList();
 	});
 	
-	
+	function showHistoryList() {
+		//展示交易历史信息
+		var id = "${t.id}";
+		//alert(id);
+		$.ajax({
+			url:"workbench/transaction/showHistoryList.do",
+			data:{
+				id:id
+			},
+			dataType:"json",
+			type:"get",
+			success:function (data) {
+				//处理返回来的数据
+				/*
+				* 		data:{success:true,thList:[{th1},{th2},{th3}]}
+				* 	or  data:{success:false, msg:msg}
+				* */
+				if(data.success){
+					var html="";
+					$.each(data.thList,function (i,n) {
+						html += '<tr>';
+						html += '	<td>'+n.stage+'</td>';
+						html += '	<td>'+n.money+'</td>';
+						html += '	<td>'+n.properity+'</td>';
+						html += '	<td>'+n.expectedDate+'</td>';
+						html += '	<td>'+n.createTime+'</td>';
+						html += '	<td>'+n.owner+'</td>';
+						html += '</tr>';
+					})
+					$("#tranHistoryBody").html(html);
+				}
+			}
+		})
+	}
 	
 </script>
 
@@ -281,8 +316,8 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<td>创建人</td>
 						</tr>
 					</thead>
-					<tbody>
-						<tr>
+					<tbody id="tranHistoryBody">
+						<%--<tr>
 							<td>资质审查</td>
 							<td>5,000</td>
 							<td>10</td>
@@ -305,7 +340,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 							<td>2017-02-07</td>
 							<td>2017-02-09 10:10:10</td>
 							<td>zhangsan</td>
-						</tr>
+						</tr>--%>
 					</tbody>
 				</table>
 			</div>

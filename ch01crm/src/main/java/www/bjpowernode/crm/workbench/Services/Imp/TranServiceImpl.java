@@ -96,5 +96,14 @@ public class TranServiceImpl implements TranService {
         return t;
     }
 
+    @Override
+    public List<TranHistory> showHistoryList(String id) throws ActivityDetialErrorException {
+        List<TranHistory> thList = tranHistoryDao.getTranHistoryList(id);
+        if(thList==null){
+            throw new ActivityDetialErrorException("查询市场活动历史信息失败");
+        }
+        return thList;
+    }
+
 
 }

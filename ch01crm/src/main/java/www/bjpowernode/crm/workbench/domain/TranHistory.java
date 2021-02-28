@@ -9,7 +9,17 @@ public class TranHistory {
 	private String createTime;
 	private String createBy;
 	private String tranId;
-	
+	//在交易模块会用到这个属性；
+	private String properity;
+
+	public String getProperity() {
+		return properity;
+	}
+
+	public void setProperity(String properity) {
+		this.properity = properity;
+	}
+
 	public String getId() {
 		return id;
 	}
