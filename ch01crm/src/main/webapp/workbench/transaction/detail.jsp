@@ -186,7 +186,7 @@ for(int i=0;i<dvList.size();i++){
         var currentProperity = $("#properity").html();
         //当前阶段的下标
         var index = index1;
-        var point = <%=point%>;
+        var point ="<%=point%>";
         //如果当前阶段的可能性为0，那么前7个为黑圈，后面两个一个为红x一个为黑x
         if("0"==currentProperity){
 
@@ -214,7 +214,7 @@ for(int i=0;i<dvList.size();i++){
         //如果当前阶段的可能性不为0，那么后面两个为黑x，前面7个可能为绿圈，绿色标记，黑圈
         }else{
             for(var i =0;i<point;i++){
-                if(i=index){
+                if(i==index){
                     //绿色标记
                     $("#"+i).removeClass();
                     $("#"+i).addClass("glyphiconglyphicon-map-marker mystage");
