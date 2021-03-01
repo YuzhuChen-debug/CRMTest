@@ -5,6 +5,11 @@
 
 <mapper namespace="www.bjpowernode.crm.workbench.dao.TranDao">
 
+    <update id="changStage">
+        update tbl_tran set stage = #{stage},editTime=#{editTime},editBy=#{editBy}
+        where id = #{id}
+    </update>
+
     <select id="getDetial" resultType="Tran">
         select
         t.id,

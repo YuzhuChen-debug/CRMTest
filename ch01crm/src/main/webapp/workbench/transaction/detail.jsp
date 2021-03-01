@@ -1,6 +1,25 @@
+<%@ page import="java.util.Map" %>
+<%@ page import="www.bjpowernode.crm.settings.domain.DictionaryValue" %>
+<%@ page import="java.util.List" %>
+<%@ page import="www.bjpowernode.crm.workbench.domain.Tran" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%
 String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "/";
+//从上下文对象中获取阶段和可能性的对应关系
+Map<String,String> pmap = (Map<String, String>) application.getAttribute("pmap");
+//从上下文对象中获阶段stage的字典值列表
+List<DictionaryValue> dvList = (List<DictionaryValue>) application.getAttribute("stageList");
+//准备前面正常值和后面丢失阶段分界点的下标。
+	int point =0;
+for(int i=0;i<dvList.size();i++){
+	DictionaryValue dv=dvList.get(i);
+	String stage = dv.getValue();
+	String properity = pmap.get(stage);
+	if("0".equals(properity)){
+		point = i;
+		break;
+	}
+}
 %>
 <!DOCTYPE html>
 <html>
@@ -125,7 +144,102 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			}
 		})
 	}
-	
+
+	function changeStage(listStage,i) {
+            //alert(listStage);
+            //alert(i);
+        //发送ajax请求，局部刷新阶段，可能性，修改者，添加新的交易历史，阶段图标
+        $.ajax({
+            url:"workbench/transaction/changeStage.do",
+            data:{
+                stage:listStage,
+                id:"${t.id}",
+                money:"${t.money}",
+                expectedDate:"${t.expectedDate}"
+            },
+            dataType:"json",
+            type:"post",
+            success:function (data) {
+                //处理返回的数据
+                /*
+                *   data:{success:true,t:t}
+                *   or data:{success:false, msg:msg}
+                * */
+                if(data.success){
+                	//刷新变更的条目
+                    $("#stage").html(data.t.stage);
+                    $("#properity").html(data.t.properity);
+                    $("#editBy").html(data.t.editBy);
+                    $("#editTime").html(data.t.editTime);
+                    //刷新交易历史列表
+					showHistoryList
+                    //刷新阶段图标
+                    changeIcon(stage,i);
+                }else{
+                    alert(data.msg);
+                }
+            }
+        })
+	}
+	function changeIcon(stage,index1) {
+        var currentStage = stage;
+        var currentProperity = $("#properity").html();
+        //当前阶段的下标
+        var index = index1;
+        var point = <%=point%>;
+        //如果当前阶段的可能性为0，那么前7个为黑圈，后面两个一个为红x一个为黑x
+        if("0"==currentProperity){
+
+            for(var i =0;i<point;i++){
+            //黑圈
+                $("#"+i).removeClass();
+                $("#"+i).addClass("glyphicon glyphicon-record mystage");
+                $("#"+i).css("color","#000000");
+            }
+
+            for(var i=point;i<<%=dvList.size()%>;i++){
+                if(i=index){
+                    //红叉
+                    $("#"+i).removeClass();
+                    $("#"+i).addClass("glyphicon glyphicon-remove mystage");
+                    $("#"+i).css("color","#FF0000");
+                }else {
+                    //黑叉
+                    $("#"+i).removeClass();
+                    $("#"+i).addClass("glyphicon glyphicon-remove mystage");
+                    $("#"+i).css("color","#000000");
+                }
+            }
+
+        //如果当前阶段的可能性不为0，那么后面两个为黑x，前面7个可能为绿圈，绿色标记，黑圈
+        }else{
+            for(var i =0;i<point;i++){
+                if(i=index){
+                    //绿色标记
+                    $("#"+i).removeClass();
+                    $("#"+i).addClass("glyphiconglyphicon-map-marker mystage");
+                    $("#"+i).css("color","#90F790");
+                }else if(i<index){
+                    //绿圈
+                    $("#"+i).removeClass();
+                    $("#"+i).addClass("glyphicon glyphicon-record mystage");
+                    $("#"+i).css("color","#90F790");
+                }else{
+                    //黑圈
+                    $("#"+i).removeClass();
+                    $("#"+i).addClass("glyphicon glyphicon-remove mystage");
+                    $("#"+i).css("color","#000000");
+                }
+            }
+
+            for(var i=point;i<<%=dvList.size()%>;i++){
+                //黑叉
+                $("#"+i).removeClass();
+                $("#"+i).addClass("glyphicon glyphicon-remove mystage");
+                $("#"+i).css("color","#000000");
+            }
+        }
+    }
 </script>
 
 </head>
@@ -150,7 +264,119 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 	<!-- 阶段状态 -->
 	<div style="position: relative; left: 40px; top: -50px;">
 		阶段&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<span class="glyphicon glyphicon-ok-circle mystage" data-toggle="popover" data-placement="bottom" data-content="资质审查" style="color: #90F790;"></span>
+		<%
+			//准备当前阶段
+			Tran t = (Tran) request.getAttribute("t");
+			//准备当前阶段
+			String currentStage = t.getStage();
+			//准备当前可能性
+			String currentProperity = pmap.get(currentStage);
+			//如果当前可能性为0，那么前7个一定是黑圈，后面两个一个是红叉，一个是黑叉
+			if("0".equals(currentProperity)){
+				//遍历所有阶段
+				for(int i =0;i<dvList.size();i++){
+					DictionaryValue dv = dvList.get(i);
+					//获取循环中的每一个阶段
+					String listStage = dv.getValue();
+					//获取循环中的每一个可能性
+					String listProperity = pmap.get(listStage);
+					//可能性为0，表示是后面2个
+					if("0".equals(listProperity)){
+						if(listStage.equals(currentStage)){
+							//红叉
+		%>
+		<span id="<%=i%>" onclick="changeStage('<%=listStage%>','<%=i%>')"
+			  class="glyphicon glyphicon-remove mystage"
+			  data-toggle="popover" data-placement="bottom"
+			  data-content="<%=dv.getText()%>" style="color: #FF0000;"></span>
+		-----------
+		<%
+						}else{
+							//黑叉
+		%>
+		<span id="<%=i%>" onclick="changeStage('<%=listStage%>','<%=i%>')"
+			  class="glyphicon glyphicon-remove mystage"
+			  data-toggle="popover" data-placement="bottom"
+			  data-content="<%=dv.getText()%>" style="color: #000000;"></span>
+		-----------
+		<%
+						}
+					//可能性不为0，表示是前面7个
+					}else{
+						//黑圈
+		%>
+		<span id="<%=i%>" onclick="changeStage('<%=listStage%>','<%=i%>')"
+			  class="glyphicon glyphicon-record mystage"
+			  data-toggle="popover" data-placement="bottom"
+			  data-content="<%=dv.getText()%>" style="color: #000000;"></span>
+		-----------
+		<%
+					}
+				}
+
+			//如果当前可能性不为0，那么后面两个一定是黑叉，前面7个可能是绿圈，可能是黑圈，绿色标记
+			}else{
+				//准备当前阶段的下标
+				int index = 0;
+				for(int i=0;i<dvList.size();i++){
+					DictionaryValue dv = dvList.get(i);
+					String stage = dv.getValue();
+					if(stage.equals(currentStage)){
+						index=i;
+						break;
+					}
+				}
+				//遍历所有阶段
+				for(int i=0;i<dvList.size();i++){
+					DictionaryValue dv = dvList.get(i);
+					//获取遍历的每个阶段
+					String listStage = dv.getValue();
+					//获取每个阶段的可能性。
+					String listProperity =pmap.get(listStage);
+					//遍历的可能性为0，那么一定是后面两个黑叉
+					if("0".equals(listProperity)){
+						//黑叉
+		%>
+		<span id="<%=i%>" onclick="changeStage('<%=listStage%>','<%=i%>')"
+			  class="glyphicon glyphicon-remove mystage"
+			  data-toggle="popover" data-placement="bottom"
+			  data-content="<%=dv.getText()%>" style="color: #000000;"></span>
+		-----------
+		<%
+					}else{
+						if(i==index){
+							//绿色标记
+		%>
+		<span id="<%=i%>" onclick="changeStage('<%=listStage%>','<%=i%>')"
+			  class="glyphicon glyphicon-map-marker mystage"
+			  data-toggle="popover" data-placement="bottom"
+			  data-content="<%=dv.getText()%>" style="color: #90F790;"></span>
+		-----------
+		<%
+						}else if(i<index){
+							//绿圈
+		%>
+		<span id="<%=i%>" onclick="changeStage('<%=listStage%>','<%=i%>')"
+			  class="glyphicon glyphicon-record mystage"
+			  data-toggle="popover" data-placement="bottom"
+			  data-content="<%=dv.getText()%>" style="color: #90F790;"></span>
+		-----------
+		<%
+						}else{
+							//黑圈
+		%>
+		<span id="<%=i%>" onclick="changeStage('<%=listStage%>','<%=i%>')"
+			  class="glyphicon glyphicon-record mystage"
+			  data-toggle="popover" data-placement="bottom"
+			  data-content="<%=dv.getText()%>" style="color: #000000;"></span>
+		-----------
+		<%
+						}
+					}
+				}
+			}
+		%>
+		<%--<span class="glyphicon glyphicon-ok-circle mystage" data-toggle="popover" data-placement="bottom" data-content="资质审查" style="color: #90F790;"></span>
 		-----------
 		<span class="glyphicon glyphicon-ok-circle mystage" data-toggle="popover" data-placement="bottom" data-content="需求分析" style="color: #90F790;"></span>
 		-----------
@@ -167,7 +393,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		<span class="glyphicon glyphicon-record mystage" data-toggle="popover" data-placement="bottom" data-content="丢失的线索"></span>
 		-----------
 		<span class="glyphicon glyphicon-record mystage" data-toggle="popover" data-placement="bottom" data-content="因竞争丢失关闭"></span>
-		-----------
+		-------------%>
 		<span class="closingDate">2010-10-10</span>
 	</div>
 	
@@ -193,7 +419,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<div style="width: 300px; color: gray;">客户名称</div>
 			<div style="width: 300px;position: relative; left: 200px; top: -20px;"><b>${t.customerId}</b></div>
 			<div style="width: 300px;position: relative; left: 450px; top: -40px; color: gray;">阶段</div>
-			<div style="width: 300px;position: relative; left: 650px; top: -60px;"><b>${t.stage}</b></div>
+			<div style="width: 300px;position: relative; left: 650px; top: -60px;"><b id="stage">${t.stage}</b></div>
 			<div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -60px;"></div>
 			<div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -60px; left: 450px;"></div>
 		</div>
@@ -201,7 +427,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 			<div style="width: 300px; color: gray;">类型</div>
 			<div style="width: 300px;position: relative; left: 200px; top: -20px;"><b>${t.type}</b></div>
 			<div style="width: 300px;position: relative; left: 450px; top: -40px; color: gray;">可能性</div>
-			<div style="width: 300px;position: relative; left: 650px; top: -60px;"><b>${t.properity}</b></div>
+			<div style="width: 300px;position: relative; left: 650px; top: -60px;"><b id="properity">${t.properity}</b></div>
 			<div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -60px;"></div>
 			<div style="height: 1px; width: 400px; background: #D5D5D5; position: relative; top: -60px; left: 450px;"></div>
 		</div>
@@ -225,7 +451,7 @@ String basePath = request.getScheme() + "://" + request.getServerName() + ":" + 
 		</div>
 		<div style="position: relative; left: 40px; height: 30px; top: 70px;">
 			<div style="width: 300px; color: gray;">修改者</div>
-			<div style="width: 500px;position: relative; left: 200px; top: -20px;"><b>${t.editBy}&nbsp;&nbsp;</b><small style="font-size: 10px; color: gray;">${t.editTime}</small></div>
+			<div style="width: 500px;position: relative; left: 200px; top: -20px;"><b id="editBy">${t.editBy}&nbsp;&nbsp;</b><small style="font-size: 10px; color: gray;" id="editTime">${t.editTime}</small></div>
 			<div style="height: 1px; width: 550px; background: #D5D5D5; position: relative; top: -20px;"></div>
 		</div>
 		<div style="position: relative; left: 40px; height: 30px; top: 80px;">

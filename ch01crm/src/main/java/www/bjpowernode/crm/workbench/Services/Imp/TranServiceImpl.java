@@ -105,5 +105,26 @@ public class TranServiceImpl implements TranService {
         return thList;
     }
 
+    @Override
+    public boolean changeStage(Tran t) throws ActivityDetialErrorException {
+        int count  = tranDao.changStage(t);
+        if(count!=1){
+            throw new ActivityDetialErrorException("更新阶段失败");
+        }
+        TranHistory th = new TranHistory();
+        th.setId(UUIDUtil.getUUID());
+        th.setStage(t.getStage());
+        th.setMoney(t.getMoney());
+        th.setExpectedDate(t.getExpectedDate());
+        th.setCreateTime(DateTimeUtil.getSysTime());
+        th.setCreateBy(t.getEditBy());
+        th.setTranId(t.getId());
+        int count1 = tranHistoryDao.addTranHistory(th);
+        if(count1!=1){
+            throw new ActivityDetialErrorException("添加交易历史信息失败");
+        }
+        return true;
+    }
+
 
 }

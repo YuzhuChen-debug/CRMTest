@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.MalformedParameterizedTypeException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +54,42 @@ public class TransactionController extends HttpServlet {
             detail(request,response);
         }else if("/workbench/transaction/showHistoryList.do".equals(path)){
             showHistoryList(request,response);
+        }else if("/workbench/transaction/changeStage.do".equals(path)){
+            changeStage(request,response);
+        }
+    }
+
+    private void changeStage(HttpServletRequest request, HttpServletResponse response) {
+        System.out.println("执行转换阶段操作");
+        String stage  = request.getParameter("stage");
+        String id = request.getParameter("id");
+        String  money = request.getParameter("money");
+        String  expectedDate = request.getParameter("expectedDate");
+        Map<String,String> pmap = (Map<String, String>) request.getServletContext().getAttribute("pmap");
+        String properity = pmap.get(stage);
+        Tran t = new Tran();
+        t.setProperity(properity);
+        t.setEditTime(DateTimeUtil.getSysTime());
+        t.setEditBy(((User)request.getSession().getAttribute("user")).getName());
+        t.setStage(stage);
+        t.setId(id);
+        t.setMoney(money);
+        t.setExpectedDate(expectedDate);
+        TranService ts = (TranService) ServiceFactory.getService(new TranServiceImpl());
+        try {
+            boolean success = ts.changeStage(t);
+            Map<String,Object> map1 = new HashMap<>();
+            //System.out.println(coList);
+            map1.put("success",true);
+            map1.put("t",t);
+            PrintJson.printJsonObj(response,map1);
+        } catch (Exception e) {
+            e.printStackTrace();
+            String msg = e.getMessage();
+            Map<String,Object> map2 = new HashMap<>();
+            map2.put("success",false);
+            map2.put("msg",msg);
+            PrintJson.printJsonObj(response,map2);
         }
     }
 

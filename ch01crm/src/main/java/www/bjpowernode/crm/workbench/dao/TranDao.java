@@ -15,4 +15,6 @@ public interface TranDao {
     int getCount(Map<String,Object> map);
 
     Tran getDetial(String id);
+
+    int changStage(Tran t);
 }

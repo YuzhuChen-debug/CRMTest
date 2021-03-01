@@ -20,4 +20,6 @@ public interface TranService  {
     Tran detail(String id) throws ActivityDetialErrorException;
 
     List<TranHistory> showHistoryList(String id) throws ActivityDetialErrorException;
+
+    boolean changeStage(Tran t) throws ActivityDetialErrorException;
 }
