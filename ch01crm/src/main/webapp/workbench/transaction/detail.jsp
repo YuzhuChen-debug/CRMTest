@@ -198,7 +198,7 @@ for(int i=0;i<dvList.size();i++){
             }
 
             for(var i=point;i<<%=dvList.size()%>;i++){
-                if(i=index){
+                if(i==index){
                     //红叉
                     $("#"+i).removeClass();
                     $("#"+i).addClass("glyphicon glyphicon-remove mystage");
@@ -217,7 +217,7 @@ for(int i=0;i<dvList.size();i++){
                 if(i==index){
                     //绿色标记
                     $("#"+i).removeClass();
-                    $("#"+i).addClass("glyphiconglyphicon-map-marker mystage");
+                    $("#"+i).addClass("glyphicon glyphicon-map-marker mystage");
                     $("#"+i).css("color","#90F790");
                 }else if(i<index){
                     //绿圈
@@ -227,7 +227,7 @@ for(int i=0;i<dvList.size();i++){
                 }else{
                     //黑圈
                     $("#"+i).removeClass();
-                    $("#"+i).addClass("glyphicon glyphicon-remove mystage");
+                    $("#"+i).addClass("glyphicon glyphicon-record mystage");
                     $("#"+i).css("color","#000000");
                 }
             }
