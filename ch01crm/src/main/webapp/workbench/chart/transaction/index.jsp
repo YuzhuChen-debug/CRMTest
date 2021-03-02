@@ -19,8 +19,8 @@
 			dataType:"json",
 			type:"get",
 			success:function (data) {
-				alert(data.total);
-				alert(data.dataList);
+				//alert(data.total);
+				//alert(data.dataList);
 				//处理返回来的数据
 				/*
 				* 	data:{total:count,dataList:[{value: count(*), name: stage},{},{}]}
