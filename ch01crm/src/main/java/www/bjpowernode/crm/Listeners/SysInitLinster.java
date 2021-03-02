@@ -11,6 +11,7 @@ import javax.servlet.ServletContextListener;
 import java.util.*;
 
 public class SysInitLinster implements ServletContextListener {
+
     @Override
     public void contextInitialized(ServletContextEvent event) {
         System.out.println("看一下是否启动全局作用域");
