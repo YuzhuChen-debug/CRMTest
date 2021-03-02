@@ -76,8 +76,19 @@
     <url-pattern>/workbench/Clue/showActivityList.do</url-pattern>
     <url-pattern>/workbench/Clue/clueTran.do</url-pattern>
 
+
   </servlet-mapping>
 
+
+  <!--图表servlet-->
+  <servlet>
+    <servlet-name>EchartsController</servlet-name>
+    <servlet-class>www.bjpowernode.crm.workbench.web.controller.EchartsController</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  <servlet-name>EchartsController</servlet-name>
+  <url-pattern>/workbench/echarts/getCountByStage.do</url-pattern>
+  </servlet-mapping>
 
   <!--交易servlet-->
   <servlet>

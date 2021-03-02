@@ -56,8 +56,12 @@ public class TransactionController extends HttpServlet {
             showHistoryList(request,response);
         }else if("/workbench/transaction/changeStage.do".equals(path)){
             changeStage(request,response);
+        }else if("/workbench/transaction/xxx.do".equals(path)){
+            //xxx(request,response);
         }
     }
+
+
 
     private void changeStage(HttpServletRequest request, HttpServletResponse response) {
         System.out.println("执行转换阶段操作");

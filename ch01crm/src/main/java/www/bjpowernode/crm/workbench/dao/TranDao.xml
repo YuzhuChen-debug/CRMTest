@@ -5,6 +5,19 @@
 
 <mapper namespace="www.bjpowernode.crm.workbench.dao.TranDao">
 
+    <select id="getcountAndStage" resultType="map">
+        select
+        count(*) as value,
+        stage as name
+        from tbl_tran
+        group by stage
+        order by stage
+    </select>
+
+    <select id="getCount1" resultType="int">
+        select count(*) from tbl_tran
+    </select>
+
     <update id="changStage">
         update tbl_tran set stage = #{stage},editTime=#{editTime},editBy=#{editBy}
         where id = #{id}
